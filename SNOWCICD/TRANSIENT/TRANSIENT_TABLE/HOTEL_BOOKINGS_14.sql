@@ -1,0 +1,9 @@
+create or replace TRANSIENT TABLE TRANSIENT.HOTEL_BOOKINGS_14 (
+	BOOKING_ID NUMBER(38,0),
+	GUEST_NAME VARCHAR(100),
+	ROOMS NUMBER(38,0),
+	CHECK_IN DATE,
+	CHECK_OUT DATE,
+	check (rooms > 0),
+	check (check_out > check_in)
+);

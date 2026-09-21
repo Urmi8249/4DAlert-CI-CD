@@ -1,0 +1,7 @@
+create or replace TRANSIENT TABLE TRANSIENT.AUTO_INCREMENT_153 (
+	EMPLOYEE_ID NUMBER(10,0) autoincrement start 100 increment 5 noorder,
+	EMP_NAME VARCHAR(100),
+	DEPARTMENT VARCHAR(50),
+	SALARY NUMBER(10,2),
+	check (EMPLOYEE_ID >= 100)
+);
