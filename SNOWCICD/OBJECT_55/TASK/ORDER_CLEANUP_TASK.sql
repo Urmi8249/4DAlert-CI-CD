@@ -1,0 +1,4 @@
+create or replace task OBJECT_55.ORDER_CLEANUP_TASK
+	warehouse=COMPUTE_WH
+	schedule='60 MINUTES'
+	as DELETE FROM OBJECT_55.EMPLOYEE_LOG;

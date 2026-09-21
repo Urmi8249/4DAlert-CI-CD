@@ -1,0 +1,1 @@
+create or replace sequence OBJECT_55.SEQUENCE_TEST_132 start with 100 increment by 10 noorder;

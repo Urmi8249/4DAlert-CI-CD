@@ -1,0 +1,1 @@
+create or replace sequence OBJECT_55.SEQUENCE_TEST_121 start with 1 increment by 1 noorder;

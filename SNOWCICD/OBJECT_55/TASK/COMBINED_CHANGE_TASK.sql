@@ -1,0 +1,5 @@
+create or replace task OBJECT_55.COMBINED_CHANGE_TASK
+	warehouse=COMPUTE_WH
+	schedule='120 MINUTES'
+	when SYSTEM$STREAM_HAS_DATA('OBJECT_55.EMP_STREAM')
+	as SELECT 1;

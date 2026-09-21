@@ -1,0 +1,1 @@
+create or replace sequence OBJECT_55."SEQUENCE_TEST@128" start with 1000 increment by 10 noorder;

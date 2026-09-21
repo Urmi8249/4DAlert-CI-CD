@@ -1,0 +1,1 @@
+create or replace stream OBJECT_55.EMPLOYEE_VIEW_STREAM_100 on view EMPLOYEE_VIEW_99;

@@ -1,0 +1,4 @@
+create or replace pipe OBJECT_55.FILE_FILTER_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
+FROM @OBJECT_55.EMPLOYEE_STAGE
+PATTERN = '.employee.'
+FILE_FORMAT = (TYPE = CSV);

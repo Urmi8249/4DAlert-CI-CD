@@ -1,0 +1,5 @@
+create or replace task OBJECT_55.FAILURE_CONTROL_TASK
+	warehouse=COMPUTE_WH
+	schedule='60 MINUTES'
+	SUSPEND_TASK_AFTER_NUM_FAILURES=5
+	as SELECT 1;

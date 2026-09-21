@@ -1,0 +1,6 @@
+create or replace pipe OBJECT_55.TRIM_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
+FROM @OBJECT_55.EMPLOYEE_STAGE
+FILE_FORMAT = (
+    TYPE = CSV
+    TRIM_SPACE = FALSE
+);

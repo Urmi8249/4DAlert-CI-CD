@@ -1,0 +1,6 @@
+create or replace task OBJECT_55.SORTING_PROCESS_TASK
+	warehouse=COMPUTE_WH
+	schedule='60 MINUTES'
+	as SELECT *
+FROM OBJECT_55.EMPLOYEE
+ORDER BY EMP_ID;

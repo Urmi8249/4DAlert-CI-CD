@@ -1,0 +1,1 @@
+create or replace stream OBJECT_55.EMPLOYEE_STREAM_95 on table EMPLOYEE_SOURCE_91 append_only = true;

@@ -1,0 +1,5 @@
+create or replace task OBJECT_55.EVENT_TRIGGER_TASK
+	warehouse=COMPUTE_WH
+	schedule='30 MINUTES'
+	when SYSTEM$STREAM_HAS_DATA('OBJECT_55.ORDER_STREAM')
+	as SELECT 1;

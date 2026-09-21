@@ -1,0 +1,6 @@
+create or replace task OBJECT_55.EMPLOYEE_LOAD_TASK
+	warehouse=COMPUTE_WH
+	schedule='60 MINUTES'
+	COMMENT='Employee data loading task'
+	as INSERT INTO OBJECT_55.EMPLOYEE_LOG
+SELECT * FROM OBJECT_55.EMPLOYEE;

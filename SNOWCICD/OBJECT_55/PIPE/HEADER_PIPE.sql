@@ -1,0 +1,6 @@
+create or replace pipe OBJECT_55.HEADER_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
+FROM @OBJECT_55.EMPLOYEE_STAGE
+FILE_FORMAT = (
+    TYPE = CSV
+    SKIP_HEADER = 1
+);

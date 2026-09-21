@@ -1,0 +1,8 @@
+create or replace materialized view OBJECT_55.EMPLOYEE_MV_249(
+	DEPARTMENT,
+	CITY
+) as
+SELECT
+    DEPARTMENT,
+    CITY
+FROM OBJECT_55.EMPLOYEE_MV_SOURCE;

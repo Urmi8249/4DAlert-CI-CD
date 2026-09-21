@@ -1,0 +1,5 @@
+create or replace task OBJECT_55.STATUS_UPDATE_TASK
+	warehouse=COMPUTE_WH
+	schedule='60 MINUTES'
+	as UPDATE OBJECT_55.EMPLOYEE
+SET DEPARTMENT = 'HR';

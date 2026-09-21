@@ -1,0 +1,4 @@
+create or replace task OBJECT_55.PROCEDURE_TRIGGER_TASK
+	warehouse=COMPUTE_WH
+	schedule='60 MINUTES'
+	as CALL OBJECT_55.PROCESS_EMPLOYEE_DATA();

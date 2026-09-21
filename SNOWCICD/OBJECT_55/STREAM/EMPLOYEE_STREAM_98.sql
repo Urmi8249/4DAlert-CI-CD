@@ -1,0 +1,1 @@
+create or replace stream OBJECT_55.EMPLOYEE_STREAM_98 on table EMPLOYEE_SOURCE_91;

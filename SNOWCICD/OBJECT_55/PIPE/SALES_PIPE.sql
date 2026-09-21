@@ -1,0 +1,4 @@
+create or replace pipe OBJECT_55.SALES_PIPE auto_ingest=false as COPY INTO OBJECT_55.SALES
+FROM @OBJECT_55.SALES_STAGE
+PATTERN = '.sales.'
+FILE_FORMAT = (TYPE = CSV);

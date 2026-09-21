@@ -1,0 +1,12 @@
+create or replace semantic view OBJECT_55.SALES_SEMANTIC_VIEW_16
+	tables (
+		SALES as OBJECT_55.SALES_SEMANTIC_15
+	)
+	dimensions (
+		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
+		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
+	)
+	metrics (
+		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
+		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT)
+	);
