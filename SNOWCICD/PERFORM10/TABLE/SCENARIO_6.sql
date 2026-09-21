@@ -1,0 +1,7 @@
+create or replace TABLE PERFORM10.SCENARIO_6 (
+	EMP_ID NUMBER(10,0) NOT NULL,
+	EMP_NAME VARCHAR(100) NOT NULL,
+	DEPT_ID NUMBER(10,0),
+	primary key (EMP_ID),
+	constraint FK_SCENARIO7_DEPT foreign key (DEPT_ID) references PERFORM10.DEPARTMENT_6(DEPT_ID)
+);
