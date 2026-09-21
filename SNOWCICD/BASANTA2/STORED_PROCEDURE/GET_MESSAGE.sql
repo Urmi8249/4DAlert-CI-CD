@@ -1,0 +1,9 @@
+CREATE OR REPLACE PROCEDURE BASANTA2.GET_MESSAGE()
+RETURNS VARCHAR
+LANGUAGE SQL
+EXECUTE AS OWNER
+AS '
+BEGIN
+    RETURN ''Hello Basanta, this procedure does not use any table.'';
+END;
+';
