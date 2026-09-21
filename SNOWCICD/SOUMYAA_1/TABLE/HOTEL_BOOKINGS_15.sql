@@ -1,0 +1,8 @@
+create or replace TABLE SOUMYAA_1.HOTEL_BOOKINGS_15 (
+	BOOKING_ID NUMBER(38,0),
+	GUEST_NAME VARCHAR(100),
+	ROOMS NUMBER(38,0),
+	CHECK_IN DATE,
+	CHECK_OUT DATE,
+	check (check_out > check_in)
+);

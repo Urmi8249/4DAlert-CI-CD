@@ -1,0 +1,7 @@
+create or replace TABLE SOUMYAA_1.EMPLOYEE_COMMENT_172 (
+	EMP_ID NUMBER(10,0),
+	EMP_NAME VARCHAR(100),
+	DEPARTMENT VARCHAR(50),
+	SALARY NUMBER(10,2)
+)COMMENT='Employee master information table'
+;

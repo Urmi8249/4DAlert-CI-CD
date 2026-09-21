@@ -1,0 +1,4 @@
+create or replace TABLE SOUMYAA_1.SCENARIO_86 (
+	NAME VARCHAR(100),
+	SALARY NUMBER(10,2)
+);

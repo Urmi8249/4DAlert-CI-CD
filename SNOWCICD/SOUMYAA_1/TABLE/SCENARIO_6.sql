@@ -1,0 +1,7 @@
+create or replace TABLE SOUMYAA_1.SCENARIO_6 (
+	EMP_ID NUMBER(10,0) NOT NULL,
+	EMP_NAME VARCHAR(100) NOT NULL,
+	DEPT_ID NUMBER(10,0),
+	primary key (EMP_ID),
+	constraint FK_SCENARIO7_DEPT foreign key (DEPT_ID) references SOUMYAA_1.DEPARTMENT_6(DEPT_ID)
+);

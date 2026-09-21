@@ -1,0 +1,4 @@
+create or replace TABLE SOUMYAA_1.VARIANT_ARRAY_SRC (
+	ID NUMBER(38,0),
+	DETAILS ARRAY
+);

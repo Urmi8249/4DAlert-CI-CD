@@ -1,0 +1,6 @@
+create or replace TABLE SOUMYAA_1.SCENARIO_85 (
+	EMP_ID NUMBER(38,0) NOT NULL,
+	NAME VARCHAR(100),
+	SALARY NUMBER(10,2),
+	primary key (EMP_ID)
+);

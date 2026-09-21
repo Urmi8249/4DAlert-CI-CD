@@ -1,0 +1,6 @@
+create or replace TABLE SOUMYAA_1.CUSTOMER_43 (
+	CUSTOMER_ID_NEW NUMBER(38,0) autoincrement start 2 increment 2 noorder,
+	CUSTOMER_NAME VARCHAR(100),
+	EMAIL VARCHAR(150),
+	PHONE_NUMBER VARCHAR(15)
+);
