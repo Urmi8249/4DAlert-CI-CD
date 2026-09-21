@@ -1,0 +1,5 @@
+create or replace task PERFORM10.EMPLOYEE_UPDATE_TASK
+	warehouse=COMPUTE_WH
+	schedule='60 MINUTES'
+	as UPDATE SORO.EMPLOYEE
+SET SALARY = SALARY + 2000;
