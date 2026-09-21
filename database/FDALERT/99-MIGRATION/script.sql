@@ -1,1807 +1,1472 @@
-create or replace sequence OBJECT_55.EMP_ID_SEQ_138 start with 1 increment by 1 noorder;
+ALTER TABLE TRANSIENT.A54 DROP CONSTRAINT UQ_HOTEL_BOOKING_ID;
 -----------------------------------------------------------------------------
-create or replace sequence OBJECT_55."SEQUENCE_TEST@128" start with 1000 increment by 10 noorder;
+ALTER TABLE TRANSIENT.A54 DROP COLUMN BOOKING_ID;
 -----------------------------------------------------------------------------
-ALTER SEQUENCE IF EXISTS OBJECT_55.SEQUENCE_TEST_123 SET INCREMENT BY 5 noorder;
+ALTER TABLE TRANSIENT.A55 DROP CONSTRAINT "UQ_HOTEL_EMAIL";
 -----------------------------------------------------------------------------
--- WARNING: Sequence modification requires recreating the sequence. Dependent applications might be affected.
-create or replace sequence OBJECT_55.SEQUENCE_TEST_124 start with 1000 increment by 10 noorder;
+ALTER TABLE TRANSIENT.A55 DROP COLUMN EMAIL;
 -----------------------------------------------------------------------------
--- WARNING: Sequence modification requires recreating the sequence. Dependent applications might be affected.
-create or replace sequence OBJECT_55.SEQUENCE_TEST_122 start with 100 increment by 1 noorder;
+ALTER TABLE TRANSIENT.A55 ADD CUST_EMAIL VARCHAR(100);
 -----------------------------------------------------------------------------
-ALTER SEQUENCE IF EXISTS OBJECT_55.SEQUENCE_TEST_126 SET INCREMENT BY 10 noorder;
+ALTER TABLE TRANSIENT.A55 ADD constraint UQ_HOTEL_EMAIL unique (CUST_EMAIL);
 -----------------------------------------------------------------------------
-create or replace sequence OBJECT_55.SEQUENCE_TEST_129 start with -1000 increment by 10 noorder;
+ALTER TABLE TRANSIENT.A53 ADD constraint UQ_HOTEL_BOOKING_ID unique (BOOKING_ID);
 -----------------------------------------------------------------------------
-create or replace sequence OBJECT_55.SEQUENCE_TEST_131 start with -100 increment by -10 noorder;
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.ARRAY_VARCHAR_SRC RENAME COLUMN DETAILS TO "temp_DETAILS";
 -----------------------------------------------------------------------------
-create or replace sequence OBJECT_55.SEQUENCE_TEST_132 start with 100 increment by 10 noorder;
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.ARRAY_VARCHAR_SRC ADD DETAILS VARCHAR(16777216);
 -----------------------------------------------------------------------------
-create or replace sequence OBJECT_55.SEQUENCE_TEST_130 start with 1000 increment by 10 noorder;
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.ARRAY_VARCHAR_SRC SET DETAILS = TO_VARCHAR(TO_JSON("temp_DETAILS")) WHERE "temp_DETAILS" IS NOT NULL;
 -----------------------------------------------------------------------------
--- WARNING: Snowflake doesn't allow DEFAULT OBJECT_55.EMP_ID_SEQ_138.NEXTVAL on an existing table; cannot alter default for EMPLOYEE_SEQ_139.sql.EMP_ID.
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.ARRAY_VARCHAR_SRC DROP COLUMN "temp_DETAILS";
 -----------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.BUILD_ADDRESS("CITY" VARCHAR, "STATE" VARCHAR, "PINCODE" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    CITY || '', '' || STATE
-';
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.ARRAY_VARIANT_SRC RENAME COLUMN DETAILS TO "temp_DETAILS";
 -----------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.BUILD_EMAIL("USER_NAME" VARCHAR, "DOMAIN" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    USER_NAME || ''@'' || DOMAIN
-';
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.ARRAY_VARIANT_SRC ADD DETAILS VARIANT;
 -----------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.BUILD_EMAIL_ID("USERNAME" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    USERNAME || ''@company.com''
-';
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.ARRAY_VARIANT_SRC SET DETAILS = "temp_DETAILS" WHERE "temp_DETAILS" IS NOT NULL;
 -----------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.BUILD_EMPLOYEE_ID("EMP_ID" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    ''EMP-'' || EMP_ID
-';
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.ARRAY_VARIANT_SRC DROP COLUMN "temp_DETAILS";
 -----------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.BUILD_PRODUCT_CODE("PRODUCT_ID" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    PRODUCT_ID
-';
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup 
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_109  RENAME TO TRANSIENT."temp_AUTO_INCREMENT_109";
 -----------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.BUILD_PHONE_LABEL("PHONE" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    ''Phone: '' || REPLACE(PHONE, ''-'', '''')
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.BUILD_PRODUCT_LABEL("PRODUCT" VARCHAR, "CATEGORY" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    CATEGORY || '' : '' || PRODUCT
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.BUILD_REFERENCE("BRANCH" VARCHAR, "NUMBER" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    BRANCH || ''/'' || NUMBER
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.CALCULATE_FEE("AMOUNT" NUMBER(38,0))
-RETURNS NUMBER(38,0)
-LANGUAGE SQL
-AS '
-    AMOUNT + 0.05
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.CALCULATE_COMMISSION("SALES_AMOUNT" NUMBER(20,2))
-RETURNS NUMBER(38,0)
-LANGUAGE SQL
-AS '
-    SALES_AMOUNT * 0.05
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.CHECK_EMPLOYEE_NAME("EMP_NAME" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    COALESCE(EMP_NAME, ''UNKNOWN'')
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.CHECK_SCORE("SCORE" NUMBER(38,0), "PASS_MARK" NUMBER(38,0))
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    CASE
-        WHEN SCORE >= PASS_MARK THEN ''PASS''
-        WHEN SCORE >= 35 THEN ''AVERAGE''
-        ELSE ''FAIL''
-    END
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.CHECK_STOCK("QUANTITY" NUMBER(38,0))
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    CASE
-        WHEN QUANTITY >= 10 THEN ''AVAILABLE''
-        ELSE ''LOW''
-    END
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.CREATE_CODE("CODE" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    CODE || ''-ACTIVE''
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.CREATE_GREETING("NAME" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    ''Welcome '' || NAME
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.CREATE_LOGIN("USER_NAME" VARCHAR, "DOMAIN" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    LOWER(USER_NAME) || ''@'' || DOMAIN
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.CREATE_STATUS_LABEL("NAME" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    ''Employee: '' || NAME || '' - Active''
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.FORMAT_CATEGORY("CATEGORY" VARCHAR, "CODE" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    ''['' || CATEGORY || ''-'' || CODE || '']''
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.FORMAT_CONTACT("NAME" VARCHAR, "PHONE" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    ''Contact: '' || NAME || '' - '' || PHONE
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.FORMAT_CUSTOMER("FIRST_NAME" VARCHAR, "LAST_NAME" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    INITCAP(FIRST_NAME) || '' '' || INITCAP(LAST_NAME)
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.FORMAT_CUSTOMER_NAME("FIRST_NAME" VARCHAR, "LAST_NAME" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    FIRST_NAME || ''_'' || LAST_NAME
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_JSON_FORMAT_119
-	TYPE = JSON
-	NULL_IF = ()
-	STRIP_OUTER_ARRAY = TRUE
-;
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_CSV_FORMAT_111
-	SKIP_HEADER = 1
-	NULL_IF = ('NA')
-;
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_CSV_FORMAT_109
-	SKIP_HEADER = 2
-;
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_CSV_FORMAT_112
-	SKIP_HEADER = 1
-	TRIM_SPACE = TRUE
-;
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_CSV_FORMAT_114
-	SKIP_HEADER = 1
-;
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_CSV_FORMAT_118
-	SKIP_HEADER = 1
-	TIMESTAMP_FORMAT = 'DD-MM-YYYY HH24:MI:SS'
-;
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_CSV_FORMAT_107
-	FIELD_DELIMITER = '|'
-	SKIP_HEADER = 1
-COMMENT='Employee CSV file format'
-;
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_CSV_FORMAT_115
-	SKIP_HEADER = 1
-	ENCODING = 'ISO88591'
-;
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_CSV_FORMAT_116
-	SKIP_HEADER = 1
-	DATE_FORMAT = 'DD-MM-YYYY'
-;
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.CHECK_AGE_GROUP("AGE" NUMBER(38,0))
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    CASE
-        WHEN AGE >= 18 THEN ''ADULT''
-        ELSE ''MINOR''
-    END
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_PARQUET_FORMAT_121
-	TYPE = PARQUET
-	NULL_IF = ()
-	USE_LOGICAL_TYPE = TRUE
-;
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_CSV_FORMAT_105
-	SKIP_HEADER = 1
-COMMENT='Updated employee CSV format'
-;
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_CSV_FORMAT_110
-	SKIP_HEADER = 1
-	COMPRESSION = GZIP
-;
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_CSV_FORMAT_113
-	SKIP_HEADER = 1
-	ESCAPE = '\\'
-;
------------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.DYNAMIC_EMPLOYEE_65(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-CITY,
-SALARY,
-BONUS,
-JOIN_DATE,
-STATUS
-) target_lag = '1 minute' refresh_mode = INCREMENTAL initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    CITY,
-    SALARY,
-    BONUS,
-    JOIN_DATE,
-    STATUS
-FROM OBJECT_55.DYNAMIC_EMPLOYEE_SOURCE
-WHERE SALARY >= 50000;
------------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.ALICE_DYNAMIC_14(
-EMP_ID
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID AS EMPLOYEE_ID
-FROM OBJECT_55.EMPLOYEE_SOURCE;
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.FORMAT_NAME("FIRST_NAME" VARCHAR, "LAST_NAME" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    UPPER(FIRST_NAME) || '' '' || UPPER(LAST_NAME)
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.GET_DEPARTMENT_NAME("DEPT" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    COALESCE(DEPT, ''UNKNOWN'')
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.FORMAT_EMPLOYEE_NAME("EMP_NAME" VARCHAR(100))
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    UPPER(EMP_NAME)
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.FORMAT_DEPARTMENT("DEPARTMENT" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    UPPER(DEPARTMENT)
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.FORMAT_EMPLOYEE("NAME" VARCHAR, "DEPARTMENT" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    TRIM(NAME) || '' - '' || TRIM(DEPARTMENT)
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.MAKE_ACCOUNT_LABEL("ACCOUNT_ID" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    ''ACCOUNT-'' || ACCOUNT_ID
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.GET_RATING("SCORE" NUMBER(38,0))
-RETURNS VARCHAR
-LANGUAGE SQL
-COMMENT='Returns employee rating'
-AS '
-    CASE
-        WHEN SCORE >= 80 THEN ''A''
-        ELSE ''B''
-    END
-';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.MAKE_CUSTOMER_CODE("CUSTOMER_ID" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    ''CUSTOMER-'' || CUSTOMER_ID || ''-01''
-';
------------------------------------------------------------------------------
-create or replace stream OBJECT_55.EMPLOYEE_STREAM_96 on table EMPLOYEE_SOURCE_91;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.TIMEZONE_TASK
-	warehouse=COMPUTE_WH
-	schedule='USING CRON 0 9 * * * Asia/Kolkata'
-	as SELECT 1;
------------------------------------------------------------------------------
-create or replace stream OBJECT_55.EMPLOYEE_STREAM_102 on table EMPLOYEE_SOURCE_91 append_only = true;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.UNIQUE_DEPARTMENT_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as SELECT DISTINCT DEPARTMENT
-FROM OBJECT_55.EMPLOYEE;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.WAREHOUSE_CHANGE_TASK
-	warehouse=TEST_WH
-	schedule='60 MINUTES'
-	as INSERT INTO OBJECT_55.EMPLOYEE_LOG
-SELECT * FROM OBJECT_55.EMPLOYEE;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.WEEKLY_PROCESS_TASK
-	warehouse=COMPUTE_WH
-	schedule='USING CRON 0 9 * * * UTC'
-	as SELECT 1;
------------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.DYNAMIC_EMPLOYEE_63(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-CITY,
-SALARY,
-BONUS,
-JOIN_DATE,
-STATUS
-) target_lag = '1 minute' refresh_mode = INCREMENTAL initialize = ON_CREATE warehouse = COMPUTE_WH
- COMMENT='Employee dynamic table containing department, salary, bonus and joining date information'
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    CITY,
-    SALARY,
-    BONUS,
-    JOIN_DATE,
-    STATUS
-FROM OBJECT_55.DYNAMIC_EMPLOYEE_SOURCE;
------------------------------------------------------------------------------
-create or replace view OBJECT_55.EMPLOYEE_VIEW_187(
-	EMP_ID,
-	EMP_NAME,
-	SALARY,
-	DEPARTMENT
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    SALARY,
-    DEPARTMENT
-FROM OBJECT_55.EMPLOYEE_VIEW_185;
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.MERGE_NAMES("FIRST_NAME" VARCHAR, "LAST_NAME" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    FIRST_NAME || LAST_NAME
-';
------------------------------------------------------------------------------
-create or replace view OBJECT_55.EMPLOYEE_VIEW_188(
-	EMP_ID,
-	EMP_NAME,
-	SALARY
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_VIEW_185;
------------------------------------------------------------------------------
-create or replace view OBJECT_55.EMPLOYEE_VIEW_189(
-	EMP_ID,
-	EMP_NAME,
-	DEPARTMENT,
-	SALARY,
-	JOIN_DATE
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    SALARY,
-    JOIN_DATE
-FROM OBJECT_55.EMPLOYEE_VIEW_185
-WHERE SALARY > 50000;
------------------------------------------------------------------------------
-create or replace view OBJECT_55.EMPLOYEE_VIEW_191(
-	EMP_ID,
-	EMP_NAME,
-	DEPARTMENT,
-	JOB_TITLE,
-	SALARY,
-	BONUS,
-	EMAIL,
-	PHONE,
-	JOIN_DATE,
-	IS_ACTIVE,
-	LOCATION
-) as 
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    JOB_TITLE,
-    SALARY,
-    BONUS,
-    EMAIL,
-    PHONE,
-    JOIN_DATE,
-    IS_ACTIVE,
-    LOCATION
-FROM OBJECT_55.EMPLOYEE_VIEW_190
-WHERE SALARY > 50000
-  AND BONUS > 4000
-  AND IS_ACTIVE = TRUE
-  AND DEPARTMENT = 'IT';
------------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.MAKE_FULL_NAME("FIRST_NAME" VARCHAR, "LAST_NAME" VARCHAR)
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    LAST_NAME || '', '' || FIRST_NAME
-';
------------------------------------------------------------------------------
-create or replace view OBJECT_55.EMPLOYEE_VIEW_184(
-	EMPLOYEE_ID,
-	EMPLOYEE_NAME,
-	DEPT_NAME,
-	EMPLOYEE_SALARY
-) as
-SELECT
-    EMP_ID AS EMPLOYEE_ID,
-    EMP_NAME AS EMPLOYEE_NAME,
-    DEPARTMENT AS DEPT_NAME,
-    SALARY AS EMPLOYEE_SALARY
-FROM OBJECT_55.EMPLOYEE_VIEW_181;
------------------------------------------------------------------------------
-create or replace view OBJECT_55.EMPLOYEE_VIEW_192(
-	EMP_ID,
-	EMP_NAME,
-	DEPARTMENT,
-	SALARY,
-	BONUS,
-	IS_ACTIVE
-) as 
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    SALARY,
-    BONUS,
-    IS_ACTIVE
-FROM OBJECT_55.EMPLOYEE_VIEW_190
-WHERE SALARY >= 55000
-  AND BONUS >= 5000
-  AND IS_ACTIVE = TRUE
-  AND DEPARTMENT IN ('HR', 'Finance');
------------------------------------------------------------------------------
-create or replace view OBJECT_55.EMPLOYEE_VIEW_186(
-	EMP_ID,
-	EMP_NAME,
-	DEPARTMENT,
-	SALARY,
-	JOIN_DATE
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    SALARY,
-    JOIN_DATE
-FROM OBJECT_55.EMPLOYEE_VIEW_185;
------------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_XML_FORMAT_120
-	TYPE = XML
-	PRESERVE_SPACE = TRUE
-;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.TABLE_TARGET_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as INSERT INTO OBJECT_55.EMPLOYEE_LOG
-SELECT * FROM OBJECT_55.EMPLOYEE;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.SALARY_FILTER_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as DELETE FROM OBJECT_55.EMPLOYEE
-WHERE SALARY < 30000;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.PROCEDURE_TRIGGER_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as CALL OBJECT_55.PROCESS_EMPLOYEE_DATA();
------------------------------------------------------------------------------
-create or replace task OBJECT_55.ORDER_CLEANUP_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as DELETE FROM OBJECT_55.EMPLOYEE_LOG;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.SORTING_PROCESS_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as SELECT *
-FROM OBJECT_55.EMPLOYEE
-ORDER BY EMP_ID;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.STATUS_UPDATE_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as UPDATE OBJECT_55.EMPLOYEE
-SET DEPARTMENT = 'HR';
------------------------------------------------------------------------------
-create or replace task OBJECT_55.MULTI_CHANGE_TASK
-	warehouse=COMPUTE_WH
-	schedule='120 MINUTES'
-	COMMENT='Employee data processing'
-	as SELECT 2;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.SALARY_SUMMARY_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as SELECT AVG(SALARY)
-FROM OBJECT_55.EMPLOYEE;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.OVERLAP_CONTROL_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	allow_overlapping_execution=true
-	as SELECT 1;
------------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.DYNAMIC_EMPLOYEE_62(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-CITY,
-SALARY,
-BONUS,
-JOIN_DATE,
-STATUS
-) target_lag = '1 minute' refresh_mode = INCREMENTAL initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    CITY,
-    SALARY,
-    BONUS,
-    JOIN_DATE,
-    STATUS
-FROM OBJECT_55.DYNAMIC_EMPLOYEE_SOURCE;
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.EMPLOYEE_MV_243(
-	EMP_ID,
-	STAFF_NAME,
-	DEPARTMENT,
-	CITY,
-	SALARY
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME AS STAFF_NAME,
-    DEPARTMENT,
-    CITY,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_MV_SOURCE;
------------------------------------------------------------------------------
-create or replace view OBJECT_55.EMPLOYEE_VIEW_193(
-	EMP_ID,
-	EMP_NAME,
-	DEPARTMENT,
-	SALARY
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_VIEW_190;
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.EMPLOYEE_MV_245(
-	EMP_ID,
-	EMP_NAME,
-	DEPARTMENT,
-	SALARY
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_MV_SOURCE
-WHERE STATUS = 'INACTIVE';
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.EMPLOYEE_MV_247(
-	EMP_ID,
-	EMP_NAME,
-	DEPARTMENT,
-	SALARY
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_MV_SOURCE
-WHERE STATUS = 'ACTIVE'
-  AND SALARY > 60000;
------------------------------------------------------------------------------
-create or replace view OBJECT_55.EMPLOYEE_VIEW_194(
-	EMP_ID,
-	EMP_NAME,
-	DEPARTMENT,
-	SALARY,
-	BONUS,
-	IS_ACTIVE,
-	TOTAL_SALARY
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    SALARY,
-    BONUS,
-    IS_ACTIVE,
-    SALARY + BONUS AS TOTAL_SALARY
-FROM OBJECT_55.EMPLOYEE_VIEW_190;
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.EMPLOYEE_MV_250(
-	EMP_ID,
-	EMP_NAME,
-	SALARY,
-	ANNUAL_SALARY
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    SALARY,
-    SALARY * 12 AS ANNUAL_SALARY
-FROM OBJECT_55.EMPLOYEE_MV_SOURCE;
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.EMPLOYEE_MV_251(
-	EMP_ID,
-	EMP_NAME,
-	SALARY
-) COMMENT='Employee salary materialized view'
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_MV_SOURCE;
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.EMPLOYEE_MV_246(
-	EMP_ID,
-	EMP_NAME,
-	DEPARTMENT,
-	SALARY
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_MV_SOURCE
-WHERE STATUS = 'ACTIVE'
-  AND SALARY > 50000;
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.EMPLOYEE_MV_249(
-	DEPARTMENT,
-	CITY
-) as
-SELECT
-    DEPARTMENT,
-    CITY
-FROM OBJECT_55.EMPLOYEE_MV_SOURCE;
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.EMPLOYEE_MV_244(
-	EMP_ID,
-	EMP_NAME,
-	DEPARTMENT,
-	CITY,
-	SALARY
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    CITY,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_MV_SOURCE
-WHERE STATUS = 'ACTIVE';
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.MV_VIEW_253(
-	SALE_ID,
-	CUSTOMER_NAME,
-	SALES_AMOUNT
-) as
-SELECT
-    SALE_ID,
-    CUSTOMER_NAME,
-    SALES_AMOUNT
-FROM OBJECT_55.MATERIALIZED_VIEW_251;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.DAILY_REPORT_TASK
-	warehouse=COMPUTE_WH
-	schedule='USING CRON 0 9 * * * UTC'
-	as SELECT 1;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.EMPLOYEE_SYNC_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as MERGE INTO OBJECT_55.EMPLOYEE T
-USING OBJECT_55.EMPLOYEE_LOG S
-ON T.EMP_ID = S.EMP_ID
-WHEN MATCHED THEN
-    UPDATE SET T.SALARY = S.SALARY;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.DATA_CHECK_TASK
-	warehouse=COMPUTE_WH
-	schedule='30 MINUTES'
-	as SELECT 1;
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.EMPLOYEE_MV_248(
-	DEPARTMENT,
-	CITY
-) as
-SELECT DISTINCT
-    DEPARTMENT,
-    CITY
-FROM OBJECT_55.EMPLOYEE_MV_SOURCE;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.EMPLOYEE_UPDATE_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as UPDATE OBJECT_55.EMPLOYEE
-SET SALARY = SALARY + 2000;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.ACTIVE_EMP_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as INSERT INTO OBJECT_55.EMPLOYEE_LOG
-SELECT * FROM OBJECT_55.EMPLOYEE
-WHERE SALARY > 30000;
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.MV_VIEW_255(
-	SALE_ID,
-	CUSTOMER_NAME,
-	PRODUCT_NAME,
-	SALES_AMOUNT
-) as
-SELECT
-    SALE_ID,  
-    CUSTOMER_NAME,
-    PRODUCT_NAME,
-    SALES_AMOUNT
-FROM OBJECT_55.MATERIALIZED_VIEW_251;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.COMBINED_CHANGE_TASK
-	warehouse=COMPUTE_WH
-	schedule='120 MINUTES'
-	when SYSTEM$STREAM_HAS_DATA('OBJECT_55.EMP_STREAM')
-	as SELECT 1;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.CONDITIONAL_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	when SYSTEM$STREAM_HAS_DATA('OBJECT_55.EMP_STREAM')
-	as INSERT INTO OBJECT_55.EMPLOYEE_LOG
-SELECT * FROM OBJECT_55.EMPLOYEE;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.EMPLOYEE_LOAD_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	COMMENT='Employee data loading task'
-	as INSERT INTO OBJECT_55.EMPLOYEE_LOG
-SELECT * FROM OBJECT_55.EMPLOYEE;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.LOG_UPDATE_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as UPDATE OBJECT_55.EMPLOYEE
-SET SALARY = SALARY + 1000
-WHERE DEPARTMENT = 'IT';
------------------------------------------------------------------------------
-create or replace task OBJECT_55.MORNING_DATA_TASK
-	warehouse=COMPUTE_WH
-	schedule='USING CRON 0 9 * * * UTC'
-	as INSERT INTO OBJECT_55.EMPLOYEE_LOG
-SELECT * FROM OBJECT_55.EMPLOYEE;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.FAILURE_CONTROL_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	SUSPEND_TASK_AFTER_NUM_FAILURES=5
-	as SELECT 1;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.EMPLOYEE_UPDATE_FIELD_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as UPDATE OBJECT_55.EMPLOYEE
-SET SALARY = SALARY + 1000;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.EVENT_TRIGGER_TASK
-	warehouse=COMPUTE_WH
-	schedule='30 MINUTES'
-	when SYSTEM$STREAM_HAS_DATA('OBJECT_55.ORDER_STREAM')
-	as SELECT 1;
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.EMPLOYEE_MV_252(
-	EMP_ID,
-	EMP_NAME,
-	SALARY
-) COMMENT='Updated employee salary information'
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_MV_SOURCE;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.HOURLY_REPORT_TASK
-	warehouse=COMPUTE_WH
-	schedule='USING CRON 30 * * * * UTC'
-	as SELECT 1;
------------------------------------------------------------------------------
-create or replace view OBJECT_55.EMPLOYEE_VIEW_195(
-	EMP_ID,
-	EMP_NAME,
-	DEPARTMENT,
-	SALARY,
-	BONUS,
-	IS_ACTIVE
-) as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    SALARY,
-    BONUS,
-    IS_ACTIVE
-FROM OBJECT_55.EMPLOYEE_VIEW_190;
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.MV_VIEW_254(
-	SALE_ID,
-	CUSTOMER_NAME,
-	SALES_AMOUNT
-) as
-SELECT
-    SALE_ID,
-    CUSTOMER_NAME,
-    SALES_AMOUNT
-FROM OBJECT_55.MATERIALIZED_VIEW_251;
------------------------------------------------------------------------------
-create or replace materialized view OBJECT_55.MV_VIEW_256(
-	SALE_ID
-) as
-SELECT
-    SALE_ID
-    
-FROM OBJECT_55.MATERIALIZED_VIEW_251;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.HOURLY_PROCESS_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as SELECT 1;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.DATA_TRANSFORM_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as INSERT INTO OBJECT_55.EMPLOYEE_LOG
-SELECT LOWER(EMP_NAME)
-FROM OBJECT_55.EMPLOYEE;
------------------------------------------------------------------------------
-create or replace task OBJECT_55.EMPLOYEE_COPY_TASK
-	warehouse=COMPUTE_WH
-	schedule='60 MINUTES'
-	as INSERT INTO OBJECT_55.EMPLOYEE_LOG
-SELECT EMP_ID, EMP_NAME, SALARY FROM OBJECT_55.EMPLOYEE;
------------------------------------------------------------------------------
-create or replace pipe OBJECT_55.PAYMENT_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
-FROM @OBJECT_55.EMPLOYEE_STAGE
-FILE_FORMAT = (TYPE = CSV);
------------------------------------------------------------------------------
-create or replace pipe OBJECT_55.DELIMITER_CHANGE_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
-FROM @OBJECT_55.EMPLOYEE_STAGE
-FILE_FORMAT = (
-    TYPE = CSV
-    FIELD_DELIMITER = ','
+-- Step 2: Recreate the target table with the correct structure 
+create or replace TRANSIENT TABLE TRANSIENT.AUTO_INCREMENT_109 (
+EMP_ID NUMBER(10,0) autoincrement start 100 increment 10 noorder,
+EMP_NAME VARCHAR(100),
+DEPARTMENT VARCHAR(50),
+SALARY NUMBER(10,2)
 );
 -----------------------------------------------------------------------------
-create or replace pipe OBJECT_55.EMPLOYEE_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE (EMP_ID, EMP_NAME, DEPARTMENT, SALARY)
-FROM (
-    SELECT
-        $1,
-        $2,
-        $3,
-        $4
-    FROM @OBJECT_55.EMPLOYEE_STAGE
-)
-FILE_FORMAT = (TYPE = CSV);
+-- Step 3: Copy data from the backup table to the new table 
+INSERT INTO TRANSIENT.AUTO_INCREMENT_109 (EMP_ID,EMP_NAME,DEPARTMENT,SALARY)
+SELECT EMP_ID,EMP_NAME,DEPARTMENT,SALARY
+FROM TRANSIENT."temp_AUTO_INCREMENT_109";
 -----------------------------------------------------------------------------
-create or replace pipe OBJECT_55.ENCLOSED_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
-FROM @OBJECT_55.EMPLOYEE_STAGE
-FILE_FORMAT = (
-    TYPE = CSV
-    FIELD_OPTIONALLY_ENCLOSED_BY = ''''
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) 
+DROP TABLE TRANSIENT."temp_AUTO_INCREMENT_109";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup 
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_110  RENAME TO TRANSIENT."temp_AUTO_INCREMENT_110";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure 
+create or replace TRANSIENT TABLE TRANSIENT.AUTO_INCREMENT_110 (
+EMP_ID NUMBER(10,0) autoincrement start 200 increment 5 noorder,
+EMP_NAME VARCHAR(100),
+DEPARTMENT VARCHAR(50),
+SALARY NUMBER(10,2)
 );
 -----------------------------------------------------------------------------
-create or replace pipe OBJECT_55.HEADER_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
-FROM @OBJECT_55.EMPLOYEE_STAGE
-FILE_FORMAT = (
-    TYPE = CSV
-    SKIP_HEADER = 1
+-- Step 3: Copy data from the backup table to the new table 
+INSERT INTO TRANSIENT.AUTO_INCREMENT_110 (EMP_ID,EMP_NAME,DEPARTMENT,SALARY)
+SELECT EMP_ID,EMP_NAME,DEPARTMENT,SALARY
+FROM TRANSIENT."temp_AUTO_INCREMENT_110";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) 
+DROP TABLE TRANSIENT."temp_AUTO_INCREMENT_110";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup 
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_114  RENAME TO TRANSIENT."temp_AUTO_INCREMENT_114";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure 
+create or replace TRANSIENT TABLE TRANSIENT.AUTO_INCREMENT_114 (
+EMP_ID NUMBER(10,0) NOT NULL autoincrement start 100 increment 5 noorder,
+EMP_NAME VARCHAR(100),
+DEPARTMENT VARCHAR(50),
+SALARY NUMBER(10,2),
+unique (EMP_ID)
 );
 -----------------------------------------------------------------------------
-create or replace pipe OBJECT_55.FORMAT_TYPE_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
-FROM @OBJECT_55.EMPLOYEE_STAGE
-FILE_FORMAT = (TYPE = CSV);
+-- Step 3: Copy data from the backup table to the new table 
+INSERT INTO TRANSIENT.AUTO_INCREMENT_114 (EMP_ID,EMP_NAME,DEPARTMENT,SALARY)
+SELECT EMP_ID,EMP_NAME,DEPARTMENT,SALARY
+FROM TRANSIENT."temp_AUTO_INCREMENT_114";
 -----------------------------------------------------------------------------
-create or replace task OBJECT_55.WEEKLY_REPORT_TASK
-	warehouse=COMPUTE_WH
-	schedule='USING CRON 0 9 * * 5 UTC'
-	as SELECT 1;
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) 
+DROP TABLE TRANSIENT."temp_AUTO_INCREMENT_114";
 -----------------------------------------------------------------------------
-create or replace pipe OBJECT_55.OPTION_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
-FROM @OBJECT_55.EMPLOYEE_STAGE
-FILE_FORMAT = (
-    TYPE = CSV
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_114 ADD unique (EMP_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_115 DROP CONSTRAINT "UK_AUTO_INCREMENT_115_EMP_ID";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_115 DROP COLUMN EMP_ID;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_115 ADD EMPLOYEE_ID NUMBER(10,0);
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_115  RENAME TO TRANSIENT."temp_AUTO_INCREMENT_115";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure
+create or replace TRANSIENT TABLE TRANSIENT.AUTO_INCREMENT_115 (
+EMPLOYEE_ID NUMBER(10,0) autoincrement start 100 increment 5 noorder,
+EMP_NAME VARCHAR(100),
+DEPARTMENT VARCHAR(50),
+SALARY NUMBER(10,2),
+constraint UK_AUTO_INCREMENT_115_EMP_ID unique (EMPLOYEE_ID)
 );
 -----------------------------------------------------------------------------
-create or replace pipe OBJECT_55.FILE_FILTER_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
-FROM @OBJECT_55.EMPLOYEE_STAGE
-PATTERN = '.employee.'
-FILE_FORMAT = (TYPE = CSV);
+-- Step 3: Copy data from the backup table to the new table
+INSERT INTO TRANSIENT.AUTO_INCREMENT_115 (EMPLOYEE_ID,EMP_NAME,DEPARTMENT,SALARY)
+SELECT EMPLOYEE_ID, EMP_NAME, DEPARTMENT, SALARY
+FROM TRANSIENT."temp_AUTO_INCREMENT_115";
 -----------------------------------------------------------------------------
-create or replace pipe OBJECT_55.NULL_FIELD_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
-FROM @OBJECT_55.EMPLOYEE_STAGE
-FILE_FORMAT = (
-    TYPE = CSV
-    EMPTY_FIELD_AS_NULL = TRUE
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed)
+DROP TABLE TRANSIENT."temp_AUTO_INCREMENT_115";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_115 ADD constraint UK_AUTO_INCREMENT_115_EMP_ID unique (EMPLOYEE_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_117 ALTER EMP_ID DROP DEFAULT;
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup 
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_116  RENAME TO TRANSIENT."temp_AUTO_INCREMENT_116";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure 
+create or replace TRANSIENT TABLE TRANSIENT.AUTO_INCREMENT_116 (
+EMP_ID NUMBER(10,0) NOT NULL autoincrement start 100 increment 5 noorder,
+EMP_NAME VARCHAR(100),
+DEPARTMENT VARCHAR(50),
+SALARY NUMBER(10,2),
+primary key (EMP_ID)
 );
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_69
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_TABLE_67
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT),
-		SALES.MIN_SALES as MIN(sales.TOTAL_AMOUNT)
-	);
+-- Step 3: Copy data from the backup table to the new table 
+INSERT INTO TRANSIENT.AUTO_INCREMENT_116 (EMP_ID,EMP_NAME,DEPARTMENT,SALARY)
+SELECT EMP_ID,EMP_NAME,DEPARTMENT,SALARY
+FROM TRANSIENT."temp_AUTO_INCREMENT_116";
 -----------------------------------------------------------------------------
-create or replace sequence OBJECT_55."SEQUENCE TEST 127" start with 1000 increment by 10 noorder;
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) 
+DROP TABLE TRANSIENT."temp_AUTO_INCREMENT_116";
 -----------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.CALCULATE_EARNINGS("SALARY" NUMBER(38,0), "BONUS" NUMBER(38,0))
-RETURNS NUMBER(38,0)
-LANGUAGE SQL
-AS '
-    SALARY + BONUS
-';
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_116 ADD primary key (EMP_ID);
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_11(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-SALARY
-) target_lag = '5 minutes' refresh_mode = AUTO initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_SOURCE;
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_119 ALTER EMP_ID DROP DEFAULT;
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_246(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-CITY,
-SALARY,
-JOIN_DATE,
-STATUS
-) target_lag = '1 minute' refresh_mode = FULL initialize = ON_CREATE warehouse = TEST_WH
- as
-SELECT EMP_ID, EMP_NAME, DEPARTMENT, CITY, SALARY, JOIN_DATE, STATUS
-FROM OBJECT_55.EMPLOYEE_DYNAMIC_SOURCE_243;
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_118 DROP primary key;
 -----------------------------------------------------------------------------
-CREATE OR REPLACE FUNCTION OBJECT_55.CHECK_ATTENDANCE("DAYS_PRESENT" NUMBER(38,0))
-RETURNS VARCHAR
-LANGUAGE SQL
-AS '
-    CASE
-        WHEN DAYS_PRESENT >= 25 THEN ''EXCELLENT''
-        WHEN DAYS_PRESENT >= 20 THEN ''ELIGIBLE''
-        ELSE ''NOT ELIGIBLE''
-    END
-';
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_118 ALTER EMP_ID DROP NOT NULL;
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_250(
-EMP_ID,
-EMP_NAME,
-EMP_DEPARTMENT,
-CITY,
-SALARY,
-SOURCE_DEPARTMENT
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = TEST_WH
- as
-SELECT
-    E.EMP_ID,
-    E.EMP_NAME,
-    E.DEPARTMENT as EMP_DEPARTMENT,
-    E.CITY,
-    E.SALARY,
-    D.DEPARTMENT AS SOURCE_DEPARTMENT
-FROM OBJECT_55.EMPLOYEE_DYNAMIC_SOURCE_243 E
-JOIN OBJECT_55.DEPARTMENT_SOURCE_247 D
-    ON E.DEPARTMENT = D.DEPARTMENT;
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_118 ADD unique (EMP_ID);
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.DYNAMIC_EMPLOYEE_64(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-CITY,
-SALARY,
-BONUS,
-JOIN_DATE,
-STATUS
-) target_lag = '1 minute' refresh_mode = INCREMENTAL initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    CITY,
-    SALARY,
-    BONUS,
-    JOIN_DATE,
-    STATUS
-FROM OBJECT_55.DYNAMIC_EMPLOYEE_SOURCE;
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_120 DROP unique (EMP_ID);
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_249(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-CITY,
-SALARY,
-JOIN_DATE,
-STATUS
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = TEST_WH
- as
-SELECT EMP_ID, EMP_NAME, DEPARTMENT, CITY, SALARY, JOIN_DATE, STATUS
-FROM OBJECT_55.EMPLOYEE_SOURCE_248;
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup 
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_122  RENAME TO TRANSIENT."temp_AUTO_INCREMENT_122";
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_252(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-SALARY
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = TEST_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_DYNAMIC_SOURCE_243;
+-- Step 2: Recreate the target table with the correct structure 
+create or replace TRANSIENT TABLE TRANSIENT.AUTO_INCREMENT_122 (
+EMP_ID NUMBER(10,0) NOT NULL autoincrement start 100 increment 5 noorder,
+EMP_NAME VARCHAR(100),
+DEPARTMENT VARCHAR(50),
+SALARY NUMBER(10,2),
+primary key (EMP_ID)
+);
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.DYNAMIC_EMPLOYEE_66(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-CITY,
-SALARY,
-BONUS,
-JOIN_DATE,
-STATUS
-) target_lag = '1 minute' refresh_mode = INCREMENTAL initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    CITY,
-    SALARY,
-    BONUS,
-    JOIN_DATE,
-    STATUS
-FROM OBJECT_55.DYNAMIC_EMPLOYEE_SOURCE
-WHERE SALARY >= 40000;
+-- Step 3: Copy data from the backup table to the new table 
+INSERT INTO TRANSIENT.AUTO_INCREMENT_122 (EMP_ID,EMP_NAME,DEPARTMENT,SALARY)
+SELECT EMP_ID,EMP_NAME,DEPARTMENT,SALARY
+FROM TRANSIENT."temp_AUTO_INCREMENT_122";
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.DYNAMIC_EMPLOYEE_78(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-CITY,
-SALARY,
-BONUS,
-JOIN_DATE,
-STATUS
-) target_lag = '1 minute' refresh_mode = INCREMENTAL initialize = ON_SCHEDULE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    CITY,
-    SALARY,
-    BONUS,
-    JOIN_DATE,
-    STATUS
-FROM OBJECT_55.DYNAMIC_EMPLOYEE_SOURCE;
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) 
+DROP TABLE TRANSIENT."temp_AUTO_INCREMENT_122";
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_5(
-EMP_ID,
-EMP_NAME,
-SALARY
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    SALARY
-FROM EMPLOYEE_SOURCE;
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup 
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_152  RENAME TO TRANSIENT."temp_AUTO_INCREMENT_152";
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.DYNAMIC_EMPLOYEE_67(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-CITY,
-SALARY,
-BONUS,
-JOIN_DATE,
-STATUS
-) target_lag = '1 minute' refresh_mode = INCREMENTAL initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    CITY,
-    SALARY,
-    BONUS,
-    JOIN_DATE,
-    STATUS
-FROM OBJECT_55.DYNAMIC_EMPLOYEE_SOURCE;
+-- Step 2: Recreate the target table with the correct structure 
+create or replace TRANSIENT TABLE TRANSIENT.AUTO_INCREMENT_152 (
+EMP_ID NUMBER(10,0) autoincrement start 200 increment 10 noorder,
+EMP_NAME VARCHAR(100),
+DEPARTMENT VARCHAR(50),
+SALARY NUMBER(10,2),
+check (EMP_ID >= 200)
+);
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_245(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-CITY,
-SALARY,
-JOIN_DATE,
-STATUS
-) target_lag = 'DOWNSTREAM' refresh_mode = AUTO initialize = ON_CREATE warehouse = TEST_WH
- as
-SELECT EMP_ID, EMP_NAME, DEPARTMENT, CITY, SALARY, JOIN_DATE, STATUS
-FROM OBJECT_55.EMPLOYEE_DYNAMIC_SOURCE_243;
+-- Step 3: Copy data from the backup table to the new table 
+INSERT INTO TRANSIENT.AUTO_INCREMENT_152 (EMP_ID,EMP_NAME,DEPARTMENT,SALARY)
+SELECT EMP_ID,EMP_NAME,DEPARTMENT,SALARY
+FROM TRANSIENT."temp_AUTO_INCREMENT_152";
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_8(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-SALARY
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT::varchar(100) as DEPARTMENT,
-    SALARY
-FROM EMPLOYEE_SOURCE;
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) 
+DROP TABLE TRANSIENT."temp_AUTO_INCREMENT_152";
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_4(
-EMP_ID,
-EMP_NAME
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME
-FROM EMPLOYEE_SOURCE;
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup for check constraint
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_152  RENAME TO TRANSIENT."temp_AUTO_INCREMENT_152";
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_6(
-EMP_ID,
-EMP_NAME,
-SALARY
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    101 as EMP_ID,
-    'Rahul' as EMP_NAME,
-    45000 as SALARY
-FROM EMPLOYEE_SOURCE;
+-- Step 2: Recreate the target table with the correct structure for check constraint
+create or replace TRANSIENT TABLE TRANSIENT.AUTO_INCREMENT_152 (
+EMP_ID NUMBER(10,0) autoincrement start 200 increment 10 noorder,
+EMP_NAME VARCHAR(100),
+DEPARTMENT VARCHAR(50),
+SALARY NUMBER(10,2),
+check (EMP_ID >= 200)
+);
 -----------------------------------------------------------------------------
-CREATE OR REPLACE FILE FORMAT OBJECT_55.EMPLOYEE_CSV_FORMAT_108
-	RECORD_DELIMITER = '|'
-	SKIP_HEADER = 1
+-- Step 3: Copy data from the backup table to the new table for check constraint
+INSERT INTO TRANSIENT.AUTO_INCREMENT_152 (EMP_ID,EMP_NAME,DEPARTMENT,SALARY)
+SELECT EMP_ID,EMP_NAME,DEPARTMENT,SALARY
+FROM TRANSIENT."temp_AUTO_INCREMENT_152";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) for check constraint
+DROP TABLE TRANSIENT."temp_AUTO_INCREMENT_152";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_153 DROP COLUMN EMP_ID;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_153 ADD EMPLOYEE_ID NUMBER(10,0);
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_153  RENAME TO TRANSIENT."temp_AUTO_INCREMENT_153";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure
+create or replace TRANSIENT TABLE TRANSIENT.AUTO_INCREMENT_153 (
+EMPLOYEE_ID NUMBER(10,0) autoincrement start 100 increment 5 noorder,
+EMP_NAME VARCHAR(100),
+DEPARTMENT VARCHAR(50),
+SALARY NUMBER(10,2),
+check (EMPLOYEE_ID >= 100)
+);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the backup table to the new table
+INSERT INTO TRANSIENT.AUTO_INCREMENT_153 (EMPLOYEE_ID,EMP_NAME,DEPARTMENT,SALARY)
+SELECT EMPLOYEE_ID, EMP_NAME, DEPARTMENT, SALARY
+FROM TRANSIENT."temp_AUTO_INCREMENT_153";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed)
+DROP TABLE TRANSIENT."temp_AUTO_INCREMENT_153";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup for check constraint
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_153  RENAME TO TRANSIENT."temp_AUTO_INCREMENT_153";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure for check constraint
+create or replace TRANSIENT TABLE TRANSIENT.AUTO_INCREMENT_153 (
+EMPLOYEE_ID NUMBER(10,0) autoincrement start 100 increment 5 noorder,
+EMP_NAME VARCHAR(100),
+DEPARTMENT VARCHAR(50),
+SALARY NUMBER(10,2),
+check (EMPLOYEE_ID >= 100)
+);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the backup table to the new table for check constraint
+INSERT INTO TRANSIENT.AUTO_INCREMENT_153 (EMPLOYEE_ID,EMP_NAME,DEPARTMENT,SALARY)
+SELECT EMPLOYEE_ID,EMP_NAME,DEPARTMENT,SALARY
+FROM TRANSIENT."temp_AUTO_INCREMENT_153";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) for check constraint
+DROP TABLE TRANSIENT."temp_AUTO_INCREMENT_153";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_156 ADD constraint UQ_EMP_ID_NAME unique (EMP_ID, EMP_NAME);
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup 
+ALTER TABLE TRANSIENT.AUTO_INCREMENT_NEW  RENAME TO TRANSIENT."temp_AUTO_INCREMENT_NEW";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure 
+create or replace TRANSIENT TABLE TRANSIENT.AUTO_INCREMENT_NEW (
+EMP_ID NUMBER(10,0) NOT NULL autoincrement start 100 increment 5 noorder,
+EMP_NAME VARCHAR(100),
+DEPARTMENT VARCHAR(50),
+SALARY NUMBER(10,2),
+unique (EMP_ID)
+);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the backup table to the new table 
+INSERT INTO TRANSIENT.AUTO_INCREMENT_NEW (EMP_ID,EMP_NAME,DEPARTMENT,SALARY)
+SELECT EMP_ID,EMP_NAME,DEPARTMENT,SALARY
+FROM TRANSIENT."temp_AUTO_INCREMENT_NEW";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) 
+DROP TABLE TRANSIENT."temp_AUTO_INCREMENT_NEW";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.BINARY_VARCHAR_SRC RENAME COLUMN DATA_VALUE TO "temp_DATA_VALUE";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.BINARY_VARCHAR_SRC ADD DATA_VALUE VARCHAR(16777216);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.BINARY_VARCHAR_SRC SET DATA_VALUE = TO_VARCHAR("temp_DATA_VALUE") WHERE "temp_DATA_VALUE" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.BINARY_VARCHAR_SRC DROP COLUMN "temp_DATA_VALUE";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.BOOLEAN_VARCHAR_SRC RENAME COLUMN IS_ACTIVE TO "temp_IS_ACTIVE";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.BOOLEAN_VARCHAR_SRC ADD IS_ACTIVE VARCHAR(16777216);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.BOOLEAN_VARCHAR_SRC SET IS_ACTIVE = "temp_IS_ACTIVE" WHERE "temp_IS_ACTIVE" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.BOOLEAN_VARCHAR_SRC DROP COLUMN "temp_IS_ACTIVE";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CLUSTER_81 DROP CLUSTERING KEY;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CLUSTER_81 CLUSTER BY (DEPARTMENT, CITY);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CLUSTER_82 DROP CLUSTERING KEY;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COLUMN_LVL_UNIQUE_58 ALTER EMAIL SET DATA TYPE VARCHAR(150);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COLUMN_LVL_UNIQUE_57 DROP unique (EMPLOYEE_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COLUMN_LVL_UNIQUE_57 DROP COLUMN EMPLOYEE_ID;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COLUMN_LVL_UNIQUE_57 ADD EMP_ID NUMBER(10,0);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COLUMN_LVL_UNIQUE_57 ADD unique (EMP_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COLUMN_LVL_UNIQUE_59 DROP unique (PHONE);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COLUMN_LVL_UNIQUE_59 DROP COLUMN PHONE;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COMPOSITE_PK_97 DROP primary key;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COMPOSITE_PK_96 DROP primary key;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COMPOSITE_PK_96 DROP COLUMN EMP_ID;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COMPOSITE_PK_96 ADD EMPLOYEE_ID NUMBER(38,0);
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.COMPOSITE_PK_96 SET EMPLOYEE_ID = 0 WHERE EMPLOYEE_ID IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COMPOSITE_PK_96 ALTER EMPLOYEE_ID SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COMPOSITE_PK_96 ADD primary key (EMPLOYEE_ID, PROJECT_ID);
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.COMPOSITE_PK_TEST_66 RENAME COLUMN EMP_ID_NEW TO "temp_EMP_ID_NEW";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.COMPOSITE_PK_TEST_66 ADD EMP_ID_NEW VARCHAR(10);
+-----------------------------------------------------------------------------
+--Step 3: Update NULL value to NOT NULL 
+UPDATE TRANSIENT.COMPOSITE_PK_TEST_66 SET EMP_ID_NEW = '' WHERE EMP_ID_NEW  IS NULL;
+-----------------------------------------------------------------------------
+--Step 4: Set the column to NOT NULL
+ALTER TABLE TRANSIENT.COMPOSITE_PK_TEST_66 MODIFY EMP_ID_NEW SET NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 5: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.COMPOSITE_PK_TEST_66 SET EMP_ID_NEW = "temp_EMP_ID_NEW" WHERE "temp_EMP_ID_NEW" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 6: Drop the temporary column
+ALTER TABLE TRANSIENT.COMPOSITE_PK_TEST_66 DROP COLUMN "temp_EMP_ID_NEW";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.COMPOSITE_PK_TEST_66 RENAME COLUMN PROJECT_ID_NEW TO "temp_PROJECT_ID_NEW";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.COMPOSITE_PK_TEST_66 ADD PROJECT_ID_NEW VARCHAR(12);
+-----------------------------------------------------------------------------
+--Step 3: Update NULL value to NOT NULL 
+UPDATE TRANSIENT.COMPOSITE_PK_TEST_66 SET PROJECT_ID_NEW = '' WHERE PROJECT_ID_NEW  IS NULL;
+-----------------------------------------------------------------------------
+--Step 4: Set the column to NOT NULL
+ALTER TABLE TRANSIENT.COMPOSITE_PK_TEST_66 MODIFY PROJECT_ID_NEW SET NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 5: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.COMPOSITE_PK_TEST_66 SET PROJECT_ID_NEW = "temp_PROJECT_ID_NEW" WHERE "temp_PROJECT_ID_NEW" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 6: Drop the temporary column
+ALTER TABLE TRANSIENT.COMPOSITE_PK_TEST_66 DROP COLUMN "temp_PROJECT_ID_NEW";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COMPOSITE_PK_TEST_66 ADD constraint PK_EMP_PROJECT primary key (EMP_ID_NEW, PROJECT_ID_NEW);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COMPOSITE_PK_TEST_72 DROP CONSTRAINT PK_EMP_PROJECT;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COMPOSITE_PK_TEST_72 ALTER EMP_ID_NEW DROP NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COMPOSITE_PK_TEST_72 ALTER PROJECT_ID_NEW DROP NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_23 ALTER SUBJECT_NAME DROP NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_23 ALTER TRAINER_NAME DROP NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_24 DROP COLUMN SUBJECT_NAME;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_24 ADD SUBJECT_TITLE VARCHAR(100);
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.COURSE_DETAILS_24 SET SUBJECT_TITLE = '' WHERE SUBJECT_TITLE IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_24 ALTER SUBJECT_TITLE SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_25 ADD TRAINING_ID NUMBER(38,0);
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.COURSE_DETAILS_25 SET TRAINING_ID = 0 WHERE TRAINING_ID IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_25 ALTER TRAINING_ID SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_25 ADD TRAINING_MODE VARCHAR(50);
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.COURSE_DETAILS_25 SET TRAINING_MODE = '' WHERE TRAINING_MODE IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_25 ALTER TRAINING_MODE SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_26 DROP COLUMN TRAINING_ID;
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.COURSE_DETAILS_27 RENAME COLUMN SUBJECT_TITLE TO "temp_SUBJECT_TITLE";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.COURSE_DETAILS_27 ADD SUBJECT_TITLE VARCHAR(100)  DEFAULT 'SQL';
+-----------------------------------------------------------------------------
+--Step 3: Update NULL value to NOT NULL 
+UPDATE TRANSIENT.COURSE_DETAILS_27 SET SUBJECT_TITLE = '' WHERE SUBJECT_TITLE  IS NULL;
+-----------------------------------------------------------------------------
+--Step 4: Set the column to NOT NULL
+ALTER TABLE TRANSIENT.COURSE_DETAILS_27 MODIFY SUBJECT_TITLE SET NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 5: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.COURSE_DETAILS_27 SET SUBJECT_TITLE = "temp_SUBJECT_TITLE" WHERE "temp_SUBJECT_TITLE" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 6: Drop the temporary column
+ALTER TABLE TRANSIENT.COURSE_DETAILS_27 DROP COLUMN "temp_SUBJECT_TITLE";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_28 ALTER SUBJECT_TITLE DROP NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_28 ALTER TRAINER_NAME DROP NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.COURSE_DETAILS_28 ALTER TRAINING_MODE DROP NOT NULL;
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.COURSE_DETAILS_29 RENAME COLUMN SUBJECT_TITLE TO "temp_SUBJECT_TITLE";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.COURSE_DETAILS_29 ADD SUBJECT_TITLE VARCHAR(50) DEFAULT 'SQL';
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.COURSE_DETAILS_29 SET SUBJECT_TITLE = "temp_SUBJECT_TITLE" WHERE "temp_SUBJECT_TITLE" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.COURSE_DETAILS_29 DROP COLUMN "temp_SUBJECT_TITLE";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.COURSE_DETAILS_29 RENAME COLUMN TRAINER_NAME TO "temp_TRAINER_NAME";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.COURSE_DETAILS_29 ADD TRAINER_NAME VARCHAR(50);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.COURSE_DETAILS_29 SET TRAINER_NAME = "temp_TRAINER_NAME" WHERE "temp_TRAINER_NAME" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.COURSE_DETAILS_29 DROP COLUMN "temp_TRAINER_NAME";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.COURSE_DETAILS_29 RENAME COLUMN TRAINING_MODE TO "temp_TRAINING_MODE";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.COURSE_DETAILS_29 ADD TRAINING_MODE VARCHAR(20);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.COURSE_DETAILS_29 SET TRAINING_MODE = "temp_TRAINING_MODE" WHERE "temp_TRAINING_MODE" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.COURSE_DETAILS_29 DROP COLUMN "temp_TRAINING_MODE";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup 
+ALTER TABLE TRANSIENT.CUSTOMER_12  RENAME TO TRANSIENT."temp_CUSTOMER_12";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure 
+create or replace TRANSIENT TABLE TRANSIENT.CUSTOMER_12 (
+CUSTOMER_ID NUMBER(38,0) autoincrement start 2 increment 2 noorder,
+CUSTOMER_NAME VARCHAR(100),
+EMAIL VARCHAR(150),
+PHONE_NUMBER VARCHAR(15)
+);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the backup table to the new table 
+INSERT INTO TRANSIENT.CUSTOMER_12 (CUSTOMER_ID,CUSTOMER_NAME,EMAIL,PHONE_NUMBER)
+SELECT CUSTOMER_ID,CUSTOMER_NAME,EMAIL,PHONE_NUMBER
+FROM TRANSIENT."temp_CUSTOMER_12";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) 
+DROP TABLE TRANSIENT."temp_CUSTOMER_12";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_13 DROP COLUMN CUSTOMER_ID;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_13 ADD CUSTOMER_ID_NEW NUMBER(38,0);
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup
+ALTER TABLE TRANSIENT.CUSTOMER_13  RENAME TO TRANSIENT."temp_CUSTOMER_13";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure
+create or replace TRANSIENT TABLE TRANSIENT.CUSTOMER_13 (
+CUSTOMER_ID_NEW NUMBER(38,0) autoincrement start 2 increment 2 noorder,
+CUSTOMER_NAME VARCHAR(100),
+EMAIL VARCHAR(150),
+PHONE_NUMBER VARCHAR(15)
+);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the backup table to the new table
+INSERT INTO TRANSIENT.CUSTOMER_13 (CUSTOMER_ID_NEW,CUSTOMER_NAME,EMAIL,PHONE_NUMBER)
+SELECT CUSTOMER_ID_NEW, CUSTOMER_NAME, EMAIL, PHONE_NUMBER
+FROM TRANSIENT."temp_CUSTOMER_13";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed)
+DROP TABLE TRANSIENT."temp_CUSTOMER_13";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_37 ADD PRODUCT_ID NUMBER(38,0);
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup
+ALTER TABLE TRANSIENT.CUSTOMER_37  RENAME TO TRANSIENT."temp_CUSTOMER_37";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure
+create or replace TRANSIENT TABLE TRANSIENT.CUSTOMER_37 (
+CUSTOMER_ID_NEW NUMBER(38,0) autoincrement start 2 increment 2 noorder,
+PRODUCT_ID NUMBER(38,0) autoincrement start 3 increment 1 noorder,
+CUSTOMER_NAME VARCHAR(100),
+EMAIL VARCHAR(150),
+PHONE_NUMBER VARCHAR(15)
+);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the backup table to the new table
+INSERT INTO TRANSIENT.CUSTOMER_37 (CUSTOMER_ID_NEW,PRODUCT_ID,CUSTOMER_NAME,EMAIL,PHONE_NUMBER)
+SELECT CUSTOMER_ID_NEW, PRODUCT_ID, CUSTOMER_NAME, EMAIL, PHONE_NUMBER
+FROM TRANSIENT."temp_CUSTOMER_37";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed)
+DROP TABLE TRANSIENT."temp_CUSTOMER_37";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup 
+ALTER TABLE TRANSIENT.CUSTOMER_42  RENAME TO TRANSIENT."temp_CUSTOMER_42";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure 
+create or replace TRANSIENT TABLE TRANSIENT.CUSTOMER_42 (
+CUSTOMER_ID_NEW NUMBER(10,0) autoincrement start 2 increment 2 noorder,
+CUSTOMER_NAME VARCHAR(100),
+EMAIL VARCHAR(150),
+PHONE_NUMBER VARCHAR(15)
+);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the backup table to the new table 
+INSERT INTO TRANSIENT.CUSTOMER_42 (CUSTOMER_ID_NEW,CUSTOMER_NAME,EMAIL,PHONE_NUMBER)
+SELECT CUSTOMER_ID_NEW,CUSTOMER_NAME,EMAIL,PHONE_NUMBER
+FROM TRANSIENT."temp_CUSTOMER_42";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) 
+DROP TABLE TRANSIENT."temp_CUSTOMER_42";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_43 DROP COLUMN PRODUCT_ID;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_SRC_176 ALTER CUSTOMER_EMAIL SET DATA TYPE VARCHAR(200);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_44 ALTER CUSTOMER_ID_NEW DROP DEFAULT;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_TGT ADD constraint UQ_CUSTOMER_EMAIL unique (CUSTOMER_EMAIL);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_TGT_161 DROP CONSTRAINT UQ_CUSTOMER_EMAIL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_TGT_161 ADD constraint UQ_CUSTOMER_EMAIL_PHONE unique (CUSTOMER_EMAIL, CUSTOMER_PHONE);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_TGT_162 DROP CONSTRAINT "UQ_CUSTOMER_EMAIL_PHONE";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_TGT_162 ADD constraint UQ_CUSTOMER_EMAIL_PHONE unique (CUSTOMER_EMAIL);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_TGT_177 DROP CONSTRAINT "UQ_CUSTOMER_EMAIL";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_TGT_177 DROP CONSTRAINT "UQ_CUSTOMER_PHONE";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_TGT_177 ADD constraint "UQ_CUSTOMER_EMAIL" unique (CUSTOMER_PHONE);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_TGT_177 ADD constraint "UQ_CUSTOMER_PHONE" unique (CUSTOMER_EMAIL);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_TGT_178 DROP CONSTRAINT UQ_CUSTOMER_EMAIL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_TGT_178 DROP CONSTRAINT UQ_CUSTOMER_PHONE;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.CUSTOMER_TGT_178 ADD constraint UQ_CUSTOMER_EMAIL_PHONE unique (CUSTOMER_EMAIL, CUSTOMER_PHONE);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEFAULT_10 DROP COLUMN STATUS;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEFAULT_9 DROP COLUMN SALARY;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEFAULT_9 ADD EMP_SAL NUMBER(10,2) DEFAULT 15000;
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.DEFAULT_8 RENAME COLUMN DEPARTMENT TO "temp_DEPARTMENT";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.DEFAULT_8 ADD DEPARTMENT VARCHAR(50) DEFAULT 'HR';
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.DEFAULT_8 SET DEPARTMENT = "temp_DEPARTMENT" WHERE "temp_DEPARTMENT" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.DEFAULT_8 DROP COLUMN "temp_DEPARTMENT";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.DEFAULT_8 RENAME COLUMN CITY TO "temp_CITY";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.DEFAULT_8 ADD CITY VARCHAR(50) DEFAULT 'soro';
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.DEFAULT_8 SET CITY = "temp_CITY" WHERE "temp_CITY" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.DEFAULT_8 DROP COLUMN "temp_CITY";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.DEFAULT_8 RENAME COLUMN SALARY TO "temp_SALARY";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.DEFAULT_8 ADD SALARY NUMBER(10,2) DEFAULT 15000;
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.DEFAULT_8 SET SALARY = "temp_SALARY" WHERE "temp_SALARY" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.DEFAULT_8 DROP COLUMN "temp_SALARY";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEPARTMENT_74 DROP CONSTRAINT "PK_DEPARTMENT";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEPARTMENT_74 DROP COLUMN DEPT_ID;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEPARTMENT_74 ADD DEPT_ID_NEW NUMBER(38,0);
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.DEPARTMENT_74 SET DEPT_ID_NEW = 0 WHERE DEPT_ID_NEW IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEPARTMENT_74 ALTER DEPT_ID_NEW SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEPARTMENT_74 ADD constraint PK_DEPARTMENT primary key (DEPT_ID_NEW);
+-----------------------------------------------------------------------------
+-- WARNING: Snowflake doesn't allow DEFAULT 4600 + 1000 on an existing table; cannot alter default for EMPLOYEE_DEFAULT_EXPRESSION_147.sql.BONUS.
+-----------------------------------------------------------------------------
+-- WARNING: Snowflake doesn't allow DEFAULT 15000 * 2 on an existing table; cannot alter default for EMPLOYEE_DEFAULT_EXPRESSION_147.sql.TOTAL_AMOUNT.
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_DEFAULT_EXPRESSION_149 DROP COLUMN TOTAL_AMOUNT;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_CURRENT_DATE_128 DROP COLUMN JOIN_DATE;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_170 ADD EMAIL VARCHAR(100);
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.EMPLOYEE_CONSTRAINT_170 SET EMAIL = '' WHERE EMAIL IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_170 ALTER EMAIL SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_170 ADD constraint UQ_EMPLOYEE_EMAIL unique (EMAIL);
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_172 RENAME COLUMN EMAIL TO "temp_EMAIL";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_172 ADD EMAIL VARCHAR(100)  DEFAULT 'unknown@email.com';
+-----------------------------------------------------------------------------
+--Step 3: Update NULL value to NOT NULL 
+UPDATE TRANSIENT.EMPLOYEE_CONSTRAINT_172 SET EMAIL = '' WHERE EMAIL  IS NULL;
+-----------------------------------------------------------------------------
+--Step 4: Set the column to NOT NULL
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_172 MODIFY EMAIL SET NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 5: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.EMPLOYEE_CONSTRAINT_172 SET EMAIL = "temp_EMAIL" WHERE "temp_EMAIL" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 6: Drop the temporary column
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_172 DROP COLUMN "temp_EMAIL";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_172 ADD constraint UQ_EMPLOYEE_EMAIL unique (EMAIL);
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.EMPLOYEE_CONSTRAINT_157 SET EMP_ID = 0 WHERE EMP_ID IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_157 ALTER EMP_ID SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_157 ADD constraint PK_EMPLOYEE primary key (EMP_ID);
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.EMPLOYEE_121 RENAME COLUMN DEPARTMENT TO "temp_DEPARTMENT";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_121 ADD DEPARTMENT VARCHAR(50) DEFAULT 'HR';
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.EMPLOYEE_121 SET DEPARTMENT = "temp_DEPARTMENT" WHERE "temp_DEPARTMENT" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.EMPLOYEE_121 DROP COLUMN "temp_DEPARTMENT";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEPARTMENT_76 DROP CONSTRAINT "PK_DEPARTMENT";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEPARTMENT_76 ALTER DEPT_ID_NEW DROP NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEPARTMENT_76 ADD NEW_ID NUMBER(38,0);
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.DEPARTMENT_76 SET NEW_ID = 0 WHERE NEW_ID IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEPARTMENT_76 ALTER NEW_ID SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.DEPARTMENT_76 ADD constraint PK_DEPARTMENT primary key (NEW_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_BOOLEAN_DEFAULT_133 DROP COLUMN IS_ACTIVE;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_BOOLEAN_DEFAULT_133 ADD ACTIVE BOOLEAN DEFAULT FALSE;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_BOOLEAN_DEFAULT_134 DROP COLUMN IS_PERMANENT;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_COMMENT_172 SET COMMENT='Employee master information Transient Table'
 ;
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.ALICE_DYNAMIC_10(
-EMP_ID,
-EMP_NAME,
-SALARY
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID AS EMPLOYEE_ID,
-    EMP_NAME AS EMPLOYEE_NAME,
-    SALARY AS EMPLOYEE_SALARY
-FROM OBJECT_55.EMPLOYEE_SOURCE;
+ALTER TABLE TRANSIENT.EMPLOYEE_CURRENT_DATE_127 DROP COLUMN JOIN_DATE;
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_12(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-SALARY
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = TEST_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_SOURCE;
+-- WARNING: Snowflake doesn't allow DEFAULT CURRENT_DATE() on an existing table; cannot alter default for EMPLOYEE_CURRENT_DATE_127.sql.JOINING_DATE.
+-- Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_CURRENT_DATE_127 ADD JOINING_DATE DATE;
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_251(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = TEST_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT
-FROM OBJECT_55.EMPLOYEE_DYNAMIC_SOURCE_243;
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_174 DROP CONSTRAINT UQ_EMPLOYEE_EMAIL;
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_88(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT_ID,
-DEPARTMENT_NAME,
-SALARY
-) target_lag = '1 minute' refresh_mode = INCREMENTAL initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    E.EMP_ID,
-    E.EMP_NAME,
-    E.DEPARTMENT_ID,
-    D.DEPARTMENT_NAME,
-    E.SALARY
-FROM OBJECT_55.EMPLOYEE_SOURCE_82 E
-LEFT JOIN OBJECT_55.DEPARTMENT_MASTER_83 D
-    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
-WHERE E.SALARY >= 30000;
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.EMPLOYEE_BOOLEAN_DEFAULT_123 RENAME COLUMN IS_ACTIVE TO "temp_IS_ACTIVE";
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_253(
-EMPLOYEE_ID,
-EMP_NAME,
-SALARY
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = TEST_WH
- as
-SELECT
-    EMP_ID AS EMPLOYEE_ID,
-    EMP_NAME,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_DYNAMIC_SOURCE_243;
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_BOOLEAN_DEFAULT_123 ADD IS_ACTIVE BOOLEAN DEFAULT FALSE;
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_254(
-EMP_ID,
-EMP_NAME,
-EMP_DEPT,
-CITY,
-SALARY,
-SOURCE_DEPT
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = TEST_WH
- as
-SELECT
-    E.EMP_ID,
-    E.EMP_NAME,
-    E.DEPARTMENT AS EMP_DEPT,
-    E.CITY,
-    E.SALARY,
-    D.DEPARTMENT AS SOURCE_DEPT
-FROM OBJECT_55.EMPLOYEE_DYNAMIC_SOURCE_243 E
-JOIN OBJECT_55.DEPARTMENT_SOURCE_247 D
-    ON E.DEPARTMENT = D.DEPARTMENT;
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.EMPLOYEE_BOOLEAN_DEFAULT_123 SET IS_ACTIVE = "temp_IS_ACTIVE" WHERE "temp_IS_ACTIVE" IS NOT NULL;
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_9(
-EMP_ID,
-DEPARTMENT,
-EMP_NAME,
-SALARY
-) target_lag = '1 minute' refresh_mode = AUTO initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID,
-    DEPARTMENT,
-    EMP_NAME,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_SOURCE;
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.EMPLOYEE_BOOLEAN_DEFAULT_123 DROP COLUMN "temp_IS_ACTIVE";
 -----------------------------------------------------------------------------
-create or replace pipe OBJECT_55.TRIM_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
-FROM @OBJECT_55.EMPLOYEE_STAGE
-FILE_FORMAT = (
-    TYPE = CSV
-    TRIM_SPACE = FALSE
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.EMPLOYEE_BOOLEAN_DEFAULT_123 RENAME COLUMN IS_PERMANENT TO "temp_IS_PERMANENT";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_BOOLEAN_DEFAULT_123 ADD IS_PERMANENT BOOLEAN DEFAULT TRUE;
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.EMPLOYEE_BOOLEAN_DEFAULT_123 SET IS_PERMANENT = "temp_IS_PERMANENT" WHERE "temp_IS_PERMANENT" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.EMPLOYEE_BOOLEAN_DEFAULT_123 DROP COLUMN "temp_IS_PERMANENT";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_159 RENAME COLUMN EMP_ID TO "temp_EMP_ID";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_159 ADD EMP_ID NUMBER(10,0);
+-----------------------------------------------------------------------------
+--Step 3: Update NULL value to NOT NULL 
+UPDATE TRANSIENT.EMPLOYEE_PK_159 SET EMP_ID = 0 WHERE EMP_ID  IS NULL;
+-----------------------------------------------------------------------------
+--Step 4: Set the column to NOT NULL
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_159 MODIFY EMP_ID SET NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 5: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.EMPLOYEE_PK_159 SET EMP_ID = "temp_EMP_ID" WHERE "temp_EMP_ID" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 6: Drop the temporary column
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_159 DROP COLUMN "temp_EMP_ID";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_159 ADD primary key (EMP_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_75 DROP CONSTRAINT FK_EMPLOYEE_DEPARTMENT;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_129 ADD STATUS VARCHAR(20) DEFAULT 'ACTIVE';
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup for check constraint
+ALTER TABLE TRANSIENT.EMPLOYEE_CHECK_IN_175  RENAME TO TRANSIENT."temp_EMPLOYEE_CHECK_IN_175";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure for check constraint
+create or replace TRANSIENT TABLE TRANSIENT.EMPLOYEE_CHECK_IN_175 (
+EMP_ID NUMBER(10,0) NOT NULL,
+EMP_NAME VARCHAR(100),
+DEPARTMENT VARCHAR(50),
+STATUS VARCHAR(20),
+CITY VARCHAR(50),
+constraint CHK_DEPARTMENT check (DEPARTMENT IN ('IT', 'Developer', 'SALES', 'Analyst')),
+constraint CHK_STATUS check (STATUS IN ('ACTIVE', 'INACTIVE')),
+constraint CHK_CITY check (CITY IN ('Soro', 'Cuttack', 'Pune', 'Bangalore')),
+constraint PK_EMPLOYEE_CHECK_IN primary key (EMP_ID)
 );
 -----------------------------------------------------------------------------
-create or replace pipe OBJECT_55.RECREATE_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
-FROM @OBJECT_55.EMPLOYEE_STAGE
-FILE_FORMAT = (TYPE = CSV);
+-- Step 3: Copy data from the backup table to the new table for check constraint
+INSERT INTO TRANSIENT.EMPLOYEE_CHECK_IN_175 (EMP_ID,EMP_NAME,DEPARTMENT,STATUS,CITY)
+SELECT EMP_ID,EMP_NAME,DEPARTMENT,STATUS,CITY
+FROM TRANSIENT."temp_EMPLOYEE_CHECK_IN_175";
 -----------------------------------------------------------------------------
-create or replace pipe OBJECT_55.REMOVE_PATTERN_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
-FROM @OBJECT_55.EMPLOYEE_STAGE
-FILE_FORMAT = (TYPE = CSV);
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) for check constraint
+DROP TABLE TRANSIENT."temp_EMPLOYEE_CHECK_IN_175";
 -----------------------------------------------------------------------------
-create or replace pipe OBJECT_55.STAGE_PATH_PIPE auto_ingest=false as COPY INTO OBJECT_55.EMPLOYEE
-FROM @OBJECT_55.EMPLOYEE_STAGE
-FILE_FORMAT = (TYPE = CSV);
+ALTER TABLE TRANSIENT.EMPLOYEE_DEFAULT_EXPRESSION_148 DROP COLUMN BONUS;
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_85(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT_ID,
-SALARY
-) target_lag = '1 minute' refresh_mode = INCREMENTAL initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT_ID,
-    SALARY
-FROM OBJECT_55.EMPLOYEE_SOURCE_82;
+-- WARNING: Snowflake doesn't allow DEFAULT 4600 + 1000 on an existing table; cannot alter default for EMPLOYEE_DEFAULT_EXPRESSION_148.sql.EMP_BONUS.
+-- Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_DEFAULT_EXPRESSION_148 ADD EMP_BONUS NUMBER(10,2);
 -----------------------------------------------------------------------------
-create or replace pipe OBJECT_55.SALES_PIPE auto_ingest=false as COPY INTO OBJECT_55.SALES
-FROM @OBJECT_55.SALES_STAGE
-PATTERN = '.sales.'
-FILE_FORMAT = (TYPE = CSV);
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_171 DROP CONSTRAINT UQ_EMPLOYEE_EMAIL;
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_89(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT_ID,
-DEPARTMENT_NAME,
-SALARY
-) target_lag = '1 minute' refresh_mode = INCREMENTAL initialize = ON_CREATE warehouse = COMPUTE_WH
- as
-SELECT
-    E.EMP_ID,
-    E.EMP_NAME,
-    E.DEPARTMENT_ID,
-    D.DEPARTMENT_NAME,
-    E.SALARY
-FROM OBJECT_55.EMPLOYEE_SOURCE_82 E
-INNER JOIN OBJECT_55.DEPARTMENT_MASTER_83 D
-    ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
-WHERE E.SALARY >= 40000;
+ALTER TABLE TRANSIENT.EMPLOYEE_CONSTRAINT_171 DROP COLUMN EMAIL;
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SALES_SEMANTIC_VIEW_18
-	tables (
-		SALES as OBJECT_55.SALES_SEMANTIC_15
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT)
-	);
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.EMPLOYEE_DROP_122 RENAME COLUMN STATUS TO "temp_STATUS";
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_45
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_19
-	)
-	dimensions (
-		SALES.CUSTOMER as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME,
-		SALES.CATEGORY as sales.CATEGORY,
-		SALES.REGION as sales.REGION,
-		SALES.SALE_DATE as sales.SALE_DATE
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT)
-	);
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_DROP_122 ADD STATUS VARCHAR(20);
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_46
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_19
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME,
-		SALES.CATEGORY as sales.CATEGORY,
-		SALES.REGION as sales.REGION,
-		SALES.SALE_DATE as sales.SALE_DATE
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT),
-		SALES.MAX_SALES as MAX(sales.TOTAL_AMOUNT)
-	);
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.EMPLOYEE_DROP_122 SET STATUS = "temp_STATUS" WHERE "temp_STATUS" IS NOT NULL;
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_50
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_48
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME,
-		SALES.CATEGORY as sales.CATEGORY,
-		SALES.REGION as sales.REGION,
-		SALES.SALE_DATE as sales.SALE_DATE
-	)
-	metrics (
-		SALES.TOTAL_SALES as MAX(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT)
-	);
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.EMPLOYEE_DROP_122 DROP COLUMN "temp_STATUS";
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_47
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_19
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME,
-		SALES.CATEGORY as sales.CATEGORY,
-		SALES.REGION as sales.REGION,
-		SALES.SALE_DATE as sales.SALE_DATE
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT)
-	);
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_164 DROP CONSTRAINT "PK_EMPLOYEE";
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_49
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_48
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as UPPER(sales.CUSTOMER_NAME),
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME,
-		SALES.CATEGORY as sales.CATEGORY,
-		SALES.REGION as sales.REGION,
-		SALES.SALE_DATE as sales.SALE_DATE
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT)
-	);
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_164 ALTER EMP_CODE DROP NOT NULL;
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_55
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_52
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
-	)
-	metrics (
-		SALES.TOTAL_SALES as MAX(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.MIN_SALES as AVG(sales.TOTAL_AMOUNT),
-		SALES.MAX_SALES as MIN(sales.TOTAL_AMOUNT),
-		SALES.TOTAL_QUANTITY as AVG(sales.QUANTITY),
-		SALES.TOTAL_DISCOUNT as MAX(sales.DISCOUNT_AMOUNT)
-	);
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_164 ADD constraint PK_EMPLOYEE primary key (EMP_ID);
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_66
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_TABLE_60
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.EAST_REGION_SALES as SUM(
-                        CASE 
-                                WHEN sales.REGION = 'West' 
-                                THEN sales.TOTAL_AMOUNT 
-                                ELSE 0 
-                        END
-                ),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT),
-		SALES.MIN_SALES as MIN(sales.TOTAL_AMOUNT),
-		SALES.MAX_SALES as MAX(sales.TOTAL_AMOUNT)
-	);
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_155 DROP CONSTRAINT PK_EMPLOYEE;
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_72
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_TABLE_67
-	)
-	facts (
-		SALES.DISCOUNT_AMOUNT as sales.DISCOUNT_AMOUNT
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT),
-		SALES.MIN_SALES as MIN(sales.TOTAL_AMOUNT)
-	);
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_155 ALTER EMP_ID DROP NOT NULL;
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_68
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_TABLE_67
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT),
-		SALES.MIN_SALES as MIN(sales.TOTAL_AMOUNT),
-		SALES.EAST_REGION_SALES as SUM(
-			CASE
-				WHEN sales.REGION = 'East'
-				THEN sales.TOTAL_AMOUNT
-				ELSE 0
-			END
-		),
-		SALES.ELECTRONICS_SALES as SUM(
-			CASE
-				WHEN sales.CATEGORY = 'Electronics'
-				THEN sales.TOTAL_AMOUNT
-				ELSE 0
-			END
-		),
-		SALES.CARD_SALES as SUM(
-			CASE
-				WHEN sales.PAYMENT_METHOD = 'Card'
-				THEN sales.TOTAL_AMOUNT
-				ELSE 0
-			END
-		)
-	);
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_155 ALTER DEPARTMENT DROP NOT NULL;
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_65
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_TABLE_60
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT),
-		SALES.MIN_SALES as MIN(sales.TOTAL_AMOUNT),
-		SALES.MAX_SALES as MAX(sales.TOTAL_AMOUNT)
-	);
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup for check constraint
+ALTER TABLE TRANSIENT.HOTEL_BOOKINGS_15  RENAME TO TRANSIENT."temp_HOTEL_BOOKINGS_15";
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_54
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_52
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT),
-		SALES.MIN_SALES as MIN(sales.TOTAL_AMOUNT),
-		SALES.MAX_SALES as MAX(sales.TOTAL_AMOUNT),
-		SALES.TOTAL_QUANTITY as SUM(sales.QUANTITY),
-		SALES.TOTAL_DISCOUNT as SUM(sales.DISCOUNT_AMOUNT)
-	);
+-- Step 2: Recreate the target table with the correct structure for check constraint
+create or replace TRANSIENT TABLE TRANSIENT.HOTEL_BOOKINGS_15 (
+BOOKING_ID NUMBER(38,0),
+GUEST_NAME VARCHAR(100),
+ROOMS NUMBER(38,0),
+CHECK_IN DATE,
+CHECK_OUT DATE,
+check (check_out > check_in)
+);
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SALES_SEMANTIC_VIEW_17
-	tables (
-		SALES as OBJECT_55.SALES_SEMANTIC_15
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME,
-		SALES.CATEGORY as sales.CATEGORY
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT)
-	);
+-- Step 3: Copy data from the backup table to the new table for check constraint
+INSERT INTO TRANSIENT.HOTEL_BOOKINGS_15 (BOOKING_ID,GUEST_NAME,ROOMS)
+SELECT BOOKING_ID,GUEST_NAME,ROOMS
+FROM TRANSIENT."temp_HOTEL_BOOKINGS_15";
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_57
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_TABLE_56
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME,
-		SALES.CATEGORY as sales.CATEGORY,
-		SALES.REGION as sales.REGION,
-		SALES.SALE_DATE as sales.SALE_DATE
-	)
-	metrics (
-		SALES.TOTAL_SALES as MAX(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as SUM(sales.TOTAL_AMOUNT)
-	);
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) for check constraint
+DROP TABLE TRANSIENT."temp_HOTEL_BOOKINGS_15";
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_53
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_52
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT)
-	);
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_60 DROP CONSTRAINT "PK_PRIMARY_SCENARIO";
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_64
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_TABLE_60
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.EAST_REGION_SALES as SUM(
-                        CASE 
-                                WHEN sales.REGION = 'East' 
-                                THEN sales.TOTAL_AMOUNT 
-                                ELSE 0 
-                        END
-                ),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT),
-		SALES.MIN_SALES as MIN(sales.TOTAL_AMOUNT),
-		SALES.MAX_SALES as MAX(sales.TOTAL_AMOUNT)
-	);
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_60 DROP COLUMN EMP_ID;
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_51
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_48
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME,
-		SALES.CATEGORY as sales.CATEGORY,
-		SALES.REGION as sales.REGION,
-		SALES.SALE_DATE as sales.SALE_DATE
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT)
-	);
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_60 ADD EMPLOYEE_ID NUMBER(38,0);
 -----------------------------------------------------------------------------
-create or replace dynamic table OBJECT_55.EMPLOYEE_DYNAMIC_244(
-EMP_ID,
-EMP_NAME,
-DEPARTMENT,
-CITY,
-SALARY,
-JOIN_DATE,
-STATUS
-) target_lag = '1 hour' refresh_mode = AUTO initialize = ON_CREATE warehouse = TEST_WH
- as
-SELECT
-    EMP_ID,
-    EMP_NAME,
-    DEPARTMENT,
-    CITY,
-    SALARY,
-    JOIN_DATE,
-    STATUS
-FROM OBJECT_55.EMPLOYEE_DYNAMIC_SOURCE_243;
+UPDATE TRANSIENT.PRIMARY_SCENARIO_60 SET EMPLOYEE_ID = 0 WHERE EMPLOYEE_ID IS NULL;
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_58
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_TABLE_56
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME,
-		SALES.CATEGORY as sales.CATEGORY,
-		SALES.REGION as sales.REGION,
-		SALES.SALE_DATE as sales.SALE_DATE
-	)
-	metrics (
-		SALES.GRAND_TOTAL as MAX(sales.TOTAL_AMOUNT),
-		SALES.MEAN_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.LOWEST_SALES as AVG(sales.TOTAL_AMOUNT),
-		SALES.HIGHEST_SALES as MIN(sales.TOTAL_AMOUNT),
-		SALES.QUANTITY_TOTAL as AVG(sales.QUANTITY),
-		SALES.DISCOUNT_TOTAL as MAX(sales.DISCOUNT_AMOUNT),
-		SALES.TAX_TOTAL as MIN(sales.TAX_AMOUNT)
-	);
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_60 ALTER EMPLOYEE_ID SET NOT NULL;
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_70
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_TABLE_67
-	)
-	facts (
-		SALES.QUANTITY as sales.QUANTITY
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT),
-		SALES.MIN_SALES as MIN(sales.TOTAL_AMOUNT)
-	);
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_60 ADD constraint PK_PRIMARY_SCENARIO primary key (EMPLOYEE_ID);
 -----------------------------------------------------------------------------
-create or replace semantic view OBJECT_55.SEMANTIC_VIEW_73
-	tables (
-		SALES as OBJECT_55.SEMANTIC_VIEW_TABLE_67
-	)
-	dimensions (
-		SALES.CUSTOMER_NAME as sales.CUSTOMER_NAME,
-		SALES.PRODUCT_NAME as sales.PRODUCT_NAME
-	)
-	metrics (
-		SALES.TOTAL_SALES as SUM(sales.TOTAL_AMOUNT),
-		SALES.AVERAGE_SALES as AVG(sales.TOTAL_AMOUNT),
-		SALES.MIN_SALES as MIN(sales.TOTAL_AMOUNT)
-	);
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_166 DROP CONSTRAINT "PK_EMPLOYEE";
 -----------------------------------------------------------------------------
-DROP FUNCTION IF EXISTS OBJECT_55.CALCULATE_BONUS(NUMBER(38,0),NUMBER(38,0));
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_166 DROP COLUMN EMP_CODE;
 -----------------------------------------------------------------------------
-DROP SEQUENCE IF EXISTS OBJECT_55.EMP_ID_SEQ_143;
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_166 ADD EMPLOYEE_CODE VARCHAR(20);
 -----------------------------------------------------------------------------
-DROP TABLE OBJECT_55.EMPLOYEE_BACKUP;
+UPDATE TRANSIENT.EMPLOYEE_PK_166 SET EMPLOYEE_CODE = '' WHERE EMPLOYEE_CODE IS NULL;
 -----------------------------------------------------------------------------
-DROP MATERIALIZED VIEW IF EXISTS OBJECT_55.MV_VIEW_257;
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_166 ALTER EMPLOYEE_CODE SET NOT NULL;
 -----------------------------------------------------------------------------
-DROP DYNAMIC TABLE IF EXISTS OBJECT_55.EMPLOYEE_DYNAMIC_DROP;
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_166 ADD constraint PK_EMPLOYEE primary key (EMPLOYEE_CODE);
 -----------------------------------------------------------------------------
-DROP STREAM IF EXISTS OBJECT_55.EMPLOYEE_STREAM_93;
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.NUMBER_FLOAT_SRC RENAME COLUMN SALARY TO "temp_SALARY";
 -----------------------------------------------------------------------------
-DROP FILE FORMAT IF EXISTS OBJECT_55.EMPLOYEE_CSV_FORMAT_106;
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.NUMBER_FLOAT_SRC ADD SALARY FLOAT;
 -----------------------------------------------------------------------------
-DROP TASK IF EXISTS OBJECT_55.DATA_REFRESH_TASK;
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.NUMBER_FLOAT_SRC SET SALARY = "temp_SALARY" WHERE "temp_SALARY" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.NUMBER_FLOAT_SRC DROP COLUMN "temp_SALARY";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_TIMESTAMP_DEFAULT_145 DROP COLUMN UPDATED_AT;
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup for check constraint
+ALTER TABLE TRANSIENT.HOTEL_BOOKINGS_16  RENAME TO TRANSIENT."temp_HOTEL_BOOKINGS_16";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure for check constraint
+create or replace TRANSIENT TABLE TRANSIENT.HOTEL_BOOKINGS_16 (
+BOOKING_ID NUMBER(38,0),
+GUEST_NAME VARCHAR(100),
+ROOMS NUMBER(38,0),
+CHECK_IN DATE,
+CHECK_OUT DATE,
+check (rooms >=0),
+check (check_out > check_in)
+);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the backup table to the new table for check constraint
+INSERT INTO TRANSIENT.HOTEL_BOOKINGS_16 (BOOKING_ID,GUEST_NAME,ROOMS)
+SELECT BOOKING_ID,GUEST_NAME,ROOMS
+FROM TRANSIENT."temp_HOTEL_BOOKINGS_16";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) for check constraint
+DROP TABLE TRANSIENT."temp_HOTEL_BOOKINGS_16";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.NUMBER_TYPE_TEST_101 RENAME COLUMN ID TO "temp_ID";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.NUMBER_TYPE_TEST_101 ADD ID VARCHAR(10);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.NUMBER_TYPE_TEST_101 SET ID = "temp_ID" WHERE "temp_ID" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.NUMBER_TYPE_TEST_101 DROP COLUMN "temp_ID";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.NUMBER_TYPE_TEST_101 RENAME COLUMN AGE TO "temp_AGE";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.NUMBER_TYPE_TEST_101 ADD AGE VARCHAR(12);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.NUMBER_TYPE_TEST_101 SET AGE = "temp_AGE" WHERE "temp_AGE" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.NUMBER_TYPE_TEST_101 DROP COLUMN "temp_AGE";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_DEFAULT_NULL_131 ALTER EMP_NAME DROP NOT NULL;
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.PRECISION_1 RENAME COLUMN SALARY TO "temp_SALARY";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.PRECISION_1 ADD SALARY NUMBER(15,2);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.PRECISION_1 SET SALARY = "temp_SALARY" WHERE "temp_SALARY" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.PRECISION_1 DROP COLUMN "temp_SALARY";
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.EMPLOYEE_PK_154 SET EMP_ID = 0 WHERE EMP_ID IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_154 ALTER EMP_ID SET NOT NULL;
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.EMPLOYEE_PK_154 SET DEPARTMENT = '' WHERE DEPARTMENT IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_154 ALTER DEPARTMENT SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_154 ADD constraint PK_EMPLOYEE primary key (EMP_ID, DEPARTMENT);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_153 DROP primary key;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_153 ALTER EMP_ID DROP NOT NULL;
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.EMPLOYEE_MULTI_DEFAULT_132 RENAME COLUMN DEPARTMENT TO "temp_DEPARTMENT";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_MULTI_DEFAULT_132 ADD DEPARTMENT VARCHAR(50) DEFAULT ' HR';
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.EMPLOYEE_MULTI_DEFAULT_132 SET DEPARTMENT = "temp_DEPARTMENT" WHERE "temp_DEPARTMENT" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.EMPLOYEE_MULTI_DEFAULT_132 DROP COLUMN "temp_DEPARTMENT";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.EMPLOYEE_MULTI_DEFAULT_132 RENAME COLUMN STATUS TO "temp_STATUS";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_MULTI_DEFAULT_132 ADD STATUS VARCHAR(20) DEFAULT 'Active';
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.EMPLOYEE_MULTI_DEFAULT_132 SET STATUS = "temp_STATUS" WHERE "temp_STATUS" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.EMPLOYEE_MULTI_DEFAULT_132 DROP COLUMN "temp_STATUS";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.EMPLOYEE_MULTI_DEFAULT_132 RENAME COLUMN CITY TO "temp_CITY";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_MULTI_DEFAULT_132 ADD CITY VARCHAR(50) DEFAULT 'cuttack';
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.EMPLOYEE_MULTI_DEFAULT_132 SET CITY = "temp_CITY" WHERE "temp_CITY" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.EMPLOYEE_MULTI_DEFAULT_132 DROP COLUMN "temp_CITY";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.EMPLOYEE_MASTER_41 RENAME COLUMN PRIORITY TO "temp_PRIORITY";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_MASTER_41 ADD PRIORITY VARCHAR(20) DEFAULT 'high';
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.EMPLOYEE_MASTER_41 SET PRIORITY = "temp_PRIORITY" WHERE "temp_PRIORITY" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.EMPLOYEE_MASTER_41 DROP COLUMN "temp_PRIORITY";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_163 DROP CONSTRAINT "PK_EMPLOYEE";
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.EMPLOYEE_PK_163 SET EMP_CODE = '' WHERE EMP_CODE IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_163 ALTER EMP_CODE SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_163 ADD constraint PK_EMPLOYEE primary key (EMP_ID, EMP_CODE);
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.OBJECT_DATA RENAME COLUMN EMP_ID TO "temp_EMP_ID";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.OBJECT_DATA ADD EMP_ID OBJECT;
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.OBJECT_DATA SET EMP_ID = OBJECT_CONSTRUCT('value', "temp_EMP_ID");
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.OBJECT_DATA DROP COLUMN "temp_EMP_ID";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.OBJECT_DATA ADD primary key (EMP_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_165 DROP CONSTRAINT "PK_EMPLOYEE";
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.EMPLOYEE_PK_165 SET EMP_ID = 0 WHERE EMP_ID IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_165 ALTER EMP_ID SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_165 ALTER EMP_CODE DROP NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_165 ADD constraint PK_EMPLOYEE primary key (EMP_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_TIMESTAMP_DEFAULT_144 DROP COLUMN CREATED_AT;
+-----------------------------------------------------------------------------
+-- WARNING: Snowflake doesn't allow DEFAULT CURRENT_TIMESTAMP() on an existing table; cannot alter default for EMPLOYEE_TIMESTAMP_DEFAULT_144.sql.CREATE_TIME.
+-- Add a new column with the original column's name
+ALTER TABLE TRANSIENT.EMPLOYEE_TIMESTAMP_DEFAULT_144 ADD CREATE_TIME TIMESTAMP_NTZ(9);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_156 DROP CONSTRAINT "PK_EMPLOYEE";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.EMPLOYEE_PK_156 ADD constraint "PK_EMPLOYEE" primary key (DEPARTMENT, EMP_ID);
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.VARIANT_OBJECT_SRC RENAME COLUMN DETAILS TO "temp_DETAILS";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.VARIANT_OBJECT_SRC ADD DETAILS OBJECT;
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.VARIANT_OBJECT_SRC SET DETAILS = "temp_DETAILS" WHERE "temp_DETAILS" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.VARIANT_OBJECT_SRC DROP COLUMN "temp_DETAILS";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.TYPECAST_1 RENAME COLUMN JOIN_DATE TO "temp_JOIN_DATE";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.TYPECAST_1 ADD JOIN_DATE DATE;
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.TYPECAST_1 SET JOIN_DATE = "temp_JOIN_DATE" WHERE "temp_JOIN_DATE" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.TYPECAST_1 DROP COLUMN "temp_JOIN_DATE";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.TYPECASTING_ALL_89 RENAME COLUMN EMP_ID TO "temp_EMP_ID";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.TYPECASTING_ALL_89 ADD EMP_ID VARCHAR(16777216);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.TYPECASTING_ALL_89 SET EMP_ID = "temp_EMP_ID" WHERE "temp_EMP_ID" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.TYPECASTING_ALL_89 DROP COLUMN "temp_EMP_ID";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.TYPECASTING_69 RENAME COLUMN STATUS TO "temp_STATUS";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.TYPECASTING_69 ADD STATUS BOOLEAN;
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.TYPECASTING_69 SET STATUS = TRY_TO_BOOLEAN("temp_STATUS") WHERE "temp_STATUS" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.TYPECASTING_69 DROP COLUMN "temp_STATUS";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.TYPECASTING_70 RENAME COLUMN PHONE_NUMBER TO "temp_PHONE_NUMBER";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.TYPECASTING_70 ADD PHONE_NUMBER BINARY(8388608);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.TYPECASTING_70 SET PHONE_NUMBER = "temp_PHONE_NUMBER" WHERE "temp_PHONE_NUMBER" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.TYPECASTING_70 DROP COLUMN "temp_PHONE_NUMBER";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.TRAINING_PROGRAM_40 ALTER PROGRAM_ID DROP DEFAULT;
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.TYPECASTING_ALL_91 RENAME COLUMN JOIN_DATE TO "temp_JOIN_DATE";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.TYPECASTING_ALL_91 ADD JOIN_DATE VARCHAR(16777216);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.TYPECASTING_ALL_91 SET JOIN_DATE = "temp_JOIN_DATE" WHERE "temp_JOIN_DATE" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.TYPECASTING_ALL_91 DROP COLUMN "temp_JOIN_DATE";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.VARIANT_ARRAY_SRC RENAME COLUMN DETAILS TO "temp_DETAILS";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.VARIANT_ARRAY_SRC ADD DETAILS ARRAY;
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.VARIANT_ARRAY_SRC SET DETAILS = "temp_DETAILS" WHERE "temp_DETAILS" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.VARIANT_ARRAY_SRC DROP COLUMN "temp_DETAILS";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.TYPECASTING_71 RENAME COLUMN AGE TO "temp_AGE";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.TYPECASTING_71 ADD AGE NUMBER(38,0);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.TYPECASTING_71 SET AGE = "temp_AGE" WHERE "temp_AGE" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.TYPECASTING_71 DROP COLUMN "temp_AGE";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.TIME_TIMESTAMP_SRC RENAME COLUMN LOGIN_TIME TO "temp_LOGIN_TIME";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.TIME_TIMESTAMP_SRC ADD LOGIN_TIME TIMESTAMP_NTZ(9);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.TIME_TIMESTAMP_SRC SET LOGIN_TIME = TO_TIMESTAMP_NTZ(CURRENT_DATE() || ' ' || "temp_LOGIN_TIME"::VARCHAR) WHERE "temp_LOGIN_TIME" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.TIME_TIMESTAMP_SRC DROP COLUMN "temp_LOGIN_TIME";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup 
+ALTER TABLE TRANSIENT.TRAINING_PROGRAM_39  RENAME TO TRANSIENT."temp_TRAINING_PROGRAM_39";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure 
+create or replace TRANSIENT TABLE TRANSIENT.TRAINING_PROGRAM_39 (
+PROGRAM_ID NUMBER(38,0) autoincrement start 100 increment 1 noorder,
+PROGRAM_NAME VARCHAR(100) NOT NULL,
+INSTRUCTOR_NAME VARCHAR(100) NOT NULL,
+PROGRAM_TYPE VARCHAR(50) DEFAULT 'ONLINE',
+DURATION_WEEKS NUMBER(38,0) DEFAULT 8
+);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the backup table to the new table 
+INSERT INTO TRANSIENT.TRAINING_PROGRAM_39 (PROGRAM_ID,PROGRAM_NAME,INSTRUCTOR_NAME,PROGRAM_TYPE,DURATION_WEEKS)
+SELECT PROGRAM_ID,PROGRAM_NAME,INSTRUCTOR_NAME,PROGRAM_TYPE,DURATION_WEEKS
+FROM TRANSIENT."temp_TRAINING_PROGRAM_39";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) 
+DROP TABLE TRANSIENT."temp_TRAINING_PROGRAM_39";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.STUDENT_DETAILS_18 DROP CONSTRAINT CHK_STUDENT_AGE;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.STUDENT_DETAILS_18 ADD constraint CHK_AGE_VALIDATION check (AGE >= 18) ENABLE NOVALIDATE;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.STUDENT_DETAILS_20 DROP CONSTRAINT CHK_STUDENT_MARKS;
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.VARIANT_OBJECT_SRC_136 RENAME COLUMN DETAILS TO "temp_DETAILS";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.VARIANT_OBJECT_SRC_136 ADD DETAILS VARIANT;
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.VARIANT_OBJECT_SRC_136 SET DETAILS = "temp_DETAILS" WHERE "temp_DETAILS" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.VARIANT_OBJECT_SRC_136 DROP COLUMN "temp_DETAILS";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.STUDENT_DETAILS_21 ADD constraint CHK_AGE_MARKS check (AGE >= 18 AND MARKS >= 35) ENABLE NOVALIDATE;
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.TYPECAST_2 RENAME COLUMN JOIN_TIME TO "temp_JOIN_TIME";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.TYPECAST_2 ADD JOIN_TIME VARCHAR(100);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.TYPECAST_2 SET JOIN_TIME = "temp_JOIN_TIME" WHERE "temp_JOIN_TIME" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.TYPECAST_2 DROP COLUMN "temp_JOIN_TIME";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.TYPECASTING_67 RENAME COLUMN SALARY TO "temp_SALARY";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.TYPECASTING_67 ADD SALARY NUMBER(38,0);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.TYPECASTING_67 SET SALARY = "temp_SALARY" WHERE "temp_SALARY" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.TYPECASTING_67 DROP COLUMN "temp_SALARY";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.TYPECASTING_93 RENAME COLUMN CREATED_AT TO "temp_CREATED_AT";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.TYPECASTING_93 ADD CREATED_AT DATE;
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.TYPECASTING_93 SET CREATED_AT = "temp_CREATED_AT" WHERE "temp_CREATED_AT" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.TYPECASTING_93 DROP COLUMN "temp_CREATED_AT";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup for check constraint
+ALTER TABLE TRANSIENT.STUDENT_DETAILS_19  RENAME TO TRANSIENT."temp_STUDENT_DETAILS_19";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure for check constraint
+create or replace TRANSIENT TABLE TRANSIENT.STUDENT_DETAILS_19 (
+STUDENT_ID NUMBER(38,0) NOT NULL,
+STUDENT_NAME VARCHAR(100),
+AGE NUMBER(3,0),
+MARKS NUMBER(5,2),
+CITY VARCHAR(50),
+constraint CHK_AGE_VALIDATION check (AGE >= 21),
+constraint CHK_STUDENT_MARKS check (MARKS BETWEEN 35 AND 100),
+constraint PK_STUDENT primary key (STUDENT_ID)
+);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the backup table to the new table for check constraint
+INSERT INTO TRANSIENT.STUDENT_DETAILS_19 (STUDENT_ID,STUDENT_NAME,AGE,MARKS,CITY)
+SELECT STUDENT_ID,STUDENT_NAME,AGE,MARKS,CITY
+FROM TRANSIENT."temp_STUDENT_DETAILS_19";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) for check constraint
+DROP TABLE TRANSIENT."temp_STUDENT_DETAILS_19";
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.TYPECASTING_68 RENAME COLUMN SALARY TO "temp_SALARY";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.TYPECASTING_68 ADD SALARY NUMBER(10,2);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.TYPECASTING_68 SET SALARY = "temp_SALARY" WHERE "temp_SALARY" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 4: Drop the temporary column
+ALTER TABLE TRANSIENT.TYPECASTING_68 DROP COLUMN "temp_SALARY";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_62 DROP CONSTRAINT PK_PRIMARY_SCENARIO;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_62 ADD constraint PK_PRIMARY_SCENARIO_NEW primary key (EMPLOYEE_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SALES_TRANSACTION_SOURCE_35 SET COMMENT='Sales transaction source Transient Table'
+;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SALES_TRANSACTION_SOURCE_36 UNSET COMMENT;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_86 DROP primary key;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_86 DROP COLUMN EMP_ID;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_100 DROP primary key;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_100 ALTER EMPLOYEE_ID DROP NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_100 ALTER PROJECT_ID DROP NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_88 ADD AGE NUMBER(38,0);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_88 ADD DEPARTMENT VARCHAR(100);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_88 ADD JOIN_DATE DATE;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_88 ADD IS_ACTIVE BOOLEAN;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SALES_TRANSACTION_SOURCE_32 ALTER COLUMN TOTAL_AMOUNT COMMENT 'Total transaction amount';
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_90 DROP COLUMN AGE;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_90 DROP COLUMN DEPARTMENT;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_90 DROP COLUMN JOIN_DATE;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_85 DROP primary key;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_85 DROP COLUMN ID;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_85 ADD EMP_ID NUMBER(38,0);
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.SCENARIO_85 SET EMP_ID = 0 WHERE EMP_ID IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_85 ALTER EMP_ID SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_85 ADD primary key (EMP_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_92 DROP COLUMN ID;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_92 ADD EMP_ID NUMBER(38,0);
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.SCENARIO_84 SET ID = 0 WHERE ID IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_84 ALTER ID SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_84 ADD primary key (ID);
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing column to a temporary column name
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_61 RENAME COLUMN EMPLOYEE_ID TO "temp_EMPLOYEE_ID";
+-----------------------------------------------------------------------------
+-- Step 2: Add a new column with the original column's name
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_61 ADD EMPLOYEE_ID VARCHAR(10);
+-----------------------------------------------------------------------------
+--Step 3: Update NULL value to NOT NULL 
+UPDATE TRANSIENT.PRIMARY_SCENARIO_61 SET EMPLOYEE_ID = '' WHERE EMPLOYEE_ID  IS NULL;
+-----------------------------------------------------------------------------
+--Step 4: Set the column to NOT NULL
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_61 MODIFY EMPLOYEE_ID SET NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 5: Copy data from the temporary column to the newly created column
+UPDATE TRANSIENT.PRIMARY_SCENARIO_61 SET EMPLOYEE_ID = "temp_EMPLOYEE_ID" WHERE "temp_EMPLOYEE_ID" IS NOT NULL;
+-----------------------------------------------------------------------------
+-- Step 6: Drop the temporary column
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_61 DROP COLUMN "temp_EMPLOYEE_ID";
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_61 ADD constraint PK_PRIMARY_SCENARIO primary key (EMPLOYEE_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_63 DROP CONSTRAINT PK_PRIMARY_SCENARIO_NEW;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.PRIMARY_SCENARIO_63 ALTER EMPLOYEE_ID DROP NOT NULL;
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.SCENARIO_98 SET EMP_ID = 0 WHERE EMP_ID IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_98 ALTER EMP_ID SET NOT NULL;
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.SCENARIO_98 SET PROJECT_ID = 0 WHERE PROJECT_ID IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_98 ALTER PROJECT_ID SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_98 ADD primary key (EMP_ID, PROJECT_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_99 DROP primary key;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_99 DROP COLUMN EMP_ID;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_99 ADD EMPLOYEE_ID NUMBER(38,0);
+-----------------------------------------------------------------------------
+UPDATE TRANSIENT.SCENARIO_99 SET EMPLOYEE_ID = 0 WHERE EMPLOYEE_ID IS NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_99 ALTER EMPLOYEE_ID SET NOT NULL;
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SCENARIO_99 ADD primary key (EMPLOYEE_ID, PROJECT_ID);
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SALES_TRANSACTION_SOURCE_33 ALTER COLUMN TOTAL_AMOUNT COMMENT ' Updated total amount for the transaction';
+-----------------------------------------------------------------------------
+ALTER TABLE TRANSIENT.SALES_TRANSACTION_SOURCE_34 ALTER COLUMN TOTAL_AMOUNT UNSET COMMENT;
+-----------------------------------------------------------------------------
+-- WARNING: Possible Data Truncation - Changes may cause truncation, loss, or inconsistency in existing data.
+-- Step 1: Rename the existing target table to create a backup 
+ALTER TABLE TRANSIENT.SCENARIO_83  RENAME TO TRANSIENT."temp_SCENARIO_83";
+-----------------------------------------------------------------------------
+-- Step 2: Recreate the target table with the correct structure 
+create or replace TRANSIENT TABLE TRANSIENT.SCENARIO_83 (
+ID NUMBER(38,0) autoincrement start 1 increment 1 noorder,
+NAME VARCHAR(100),
+CODE VARCHAR(10),
+SALARY NUMBER(10,2),
+RATING FLOAT,
+IS_ACTIVE BOOLEAN,
+JOIN_DATE DATE,
+JOIN_TIME TIME(9),
+CREATED_AT TIMESTAMP_NTZ(9)
+);
+-----------------------------------------------------------------------------
+-- Step 3: Copy data from the backup table to the new table 
+INSERT INTO TRANSIENT.SCENARIO_83 (ID,NAME,CODE,SALARY,RATING,IS_ACTIVE,JOIN_DATE,JOIN_TIME,CREATED_AT)
+SELECT ID,NAME,CODE,SALARY,RATING,IS_ACTIVE,JOIN_DATE,JOIN_TIME,CREATED_AT
+FROM TRANSIENT."temp_SCENARIO_83";
+-----------------------------------------------------------------------------
+-- Step 4: Drop the backup table (optional, only if backup is no longer needed) 
+DROP TABLE TRANSIENT."temp_SCENARIO_83";
+-----------------------------------------------------------------------------
+DROP TABLE TRANSIENT.EMPLOYEE_77;
+-----------------------------------------------------------------------------
+DROP TABLE TRANSIENT.PRIMARY_SCENARIO_50;
