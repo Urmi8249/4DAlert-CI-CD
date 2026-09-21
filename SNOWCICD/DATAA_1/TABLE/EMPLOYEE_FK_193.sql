@@ -1,0 +1,9 @@
+create or replace TABLE DATAA_1.EMPLOYEE_FK_193 (
+	EMP_ID NUMBER(10,0) NOT NULL,
+	EMP_NAME VARCHAR(100),
+	DEPT_ID NUMBER(10,0),
+	PROJECT_ID NUMBER(10,0),
+	SALARY NUMBER(10,2),
+	constraint PK_EMP primary key (EMP_ID),
+	constraint FK_EMP_DEPT foreign key (DEPT_ID) references DATAA_1.DEPARTMENT_FK_193(DEPT_ID)
+);

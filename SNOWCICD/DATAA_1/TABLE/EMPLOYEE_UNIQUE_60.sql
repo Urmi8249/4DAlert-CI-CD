@@ -1,0 +1,10 @@
+create or replace TABLE DATAA_1.EMPLOYEE_UNIQUE_60 (
+	EMP_ID NUMBER(10,0),
+	EMP_NAME VARCHAR(100),
+	EMAIL VARCHAR(100),
+	DEPT VARCHAR(50),
+	unique (EMP_ID),
+	unique (EMP_NAME),
+	unique (EMAIL),
+	unique (DEPT)
+);

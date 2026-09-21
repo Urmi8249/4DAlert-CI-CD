@@ -1,0 +1,4 @@
+create or replace TABLE DATAA_1.TIME_TEST_46 (
+	ID NUMBER(38,0),
+	TIME_COL TIMESTAMP_TZ(9)
+);

@@ -1,0 +1,5 @@
+create or replace TABLE DATAA_1.ORDER_CHECK28 (
+	ORDER_ID NUMBER(38,0),
+	UNIT_PRICE NUMBER(10,2),
+	constraint CK_UNIT_PRICE check (UNIT_PRICE >= 100.50)
+);

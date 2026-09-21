@@ -1,0 +1,4 @@
+create or replace TABLE DATAA_1.TEXT_TEST_58 (
+	ID NUMBER(38,0),
+	TEXT_COL NUMBER(38,0)
+);

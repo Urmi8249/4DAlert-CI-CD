@@ -1,0 +1,5 @@
+create or replace TABLE DATAA_1.TYPE_CAST_44 (
+	ID NUMBER(38,0),
+	NAME VARCHAR(20),
+	SALARY BOOLEAN
+);

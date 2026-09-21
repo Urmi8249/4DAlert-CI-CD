@@ -1,0 +1,5 @@
+create or replace TABLE DATAA_1.TYPE_CAST_43 (
+	ID NUMBER(38,0),
+	NAME VARCHAR(20),
+	SALARY NUMBER(15,3)
+);

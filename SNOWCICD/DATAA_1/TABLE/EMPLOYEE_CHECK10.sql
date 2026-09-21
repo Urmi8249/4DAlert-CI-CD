@@ -1,0 +1,11 @@
+create or replace TABLE DATAA_1.EMPLOYEE_CHECK10 (
+	EMP_ID NUMBER(38,0),
+	EMP_NAME VARCHAR(50),
+	AGE NUMBER(38,0),
+	SALARY NUMBER(10,2),
+	STATUS VARCHAR(20),
+	check (EMP_ID > 0),
+	check (AGE >= 18),
+	check (SALARY > 0),
+	check (STATUS IN ('ACTIVE', 'INACTIVE'))
+);

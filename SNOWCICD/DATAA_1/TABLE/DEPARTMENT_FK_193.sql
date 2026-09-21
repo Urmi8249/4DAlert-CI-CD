@@ -1,0 +1,7 @@
+create or replace TABLE DATAA_1.DEPARTMENT_FK_193 (
+	DEPT_ID NUMBER(10,0) NOT NULL,
+	PROJECT_ID NUMBER(10,0) NOT NULL,
+	DEPT_NAME VARCHAR(100),
+	constraint UQ_PROJECT unique (PROJECT_ID),
+	constraint PK_DEPT primary key (DEPT_ID)
+);

@@ -1,0 +1,5 @@
+create or replace TABLE DATAA_1.DEPARTMENT_FK_191 (
+	DEPT_ID NUMBER(10,0) NOT NULL,
+	DEPT_NAME VARCHAR(100),
+	constraint PK_DEPT primary key (DEPT_ID)
+);
