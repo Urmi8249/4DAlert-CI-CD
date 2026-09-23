@@ -1,0 +1,1 @@
+create or replace stream DUMMY3.EMPLOYEE_STREAM on table EMPLOYEE_OBJECT_TEST;

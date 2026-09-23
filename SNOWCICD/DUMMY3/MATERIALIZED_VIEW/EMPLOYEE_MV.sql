@@ -1,0 +1,12 @@
+create or replace materialized view DUMMY3.EMPLOYEE_MV(
+	EMP_ID,
+	EMP_NAME,
+	DEPARTMENT,
+	SALARY
+) as
+SELECT
+    EMP_ID,
+    EMP_NAME,
+    DEPARTMENT,
+    SALARY
+FROM DUMMY3.EMPLOYEE_OBJECT_TEST;
