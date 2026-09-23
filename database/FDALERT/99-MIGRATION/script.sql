@@ -1,3 +1,9 @@
 
 -----------------------------------------------------------------------------
-DROP TABLE SOUMYA.ORDERS;
+create or replace TABLE SOUMYA.ORDERS (
+	ORDER_ID NUMBER(38,0),
+	CUSTOMER_ID NUMBER(38,0),
+	PRODUCT_ID NUMBER(38,0),
+	ORDER_DATE DATE,
+	CUSTOMER_NAME VARCHAR(20)
+);
