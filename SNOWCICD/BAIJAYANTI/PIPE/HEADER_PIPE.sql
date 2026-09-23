@@ -1,0 +1,6 @@
+create or replace pipe BAIJAYANTI.HEADER_PIPE auto_ingest=false as COPY INTO SORO.EMPLOYEE
+FROM @SORO.EMPLOYEE_STAGE
+FILE_FORMAT = (
+    TYPE = CSV
+    SKIP_HEADER = 1
+);
