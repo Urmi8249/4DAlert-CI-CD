@@ -1,1 +1,1 @@
-create or replace sequence DUMMY3.EMPLOYEE_SEQ start with 1 increment by 1 noorder;
+create or replace sequence DUMMY3.EMPLOYEE_SEQ start with 1 increment by 5 noorder;
