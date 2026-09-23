@@ -1,0 +1,19 @@
+create or replace dynamic table BAIJAYANTI.EMPLOYEE_DYNAMIC_244(
+	EMP_ID,
+	EMP_NAME,
+	DEPARTMENT,
+	CITY,
+	SALARY,
+	JOIN_DATE,
+	STATUS
+) target_lag = '1 hour' refresh_mode = AUTO initialize = ON_CREATE warehouse = TEST_WH
+ as
+SELECT
+    EMP_ID,
+    EMP_NAME,
+    DEPARTMENT,
+    CITY,
+    SALARY,
+    JOIN_DATE,
+    STATUS
+FROM Baijayanti.EMPLOYEE_DYNAMIC_SOURCE_243;

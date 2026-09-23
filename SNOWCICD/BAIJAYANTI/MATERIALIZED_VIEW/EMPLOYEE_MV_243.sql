@@ -1,0 +1,14 @@
+create or replace materialized view BAIJAYANTI.EMPLOYEE_MV_243(
+	EMP_ID,
+	STAFF_NAME,
+	DEPARTMENT,
+	CITY,
+	SALARY
+) as
+SELECT
+    EMP_ID,
+    EMP_NAME AS STAFF_NAME,
+    DEPARTMENT,
+    CITY,
+    SALARY
+FROM Baijayanti.EMPLOYEE_MV_SOURCE;

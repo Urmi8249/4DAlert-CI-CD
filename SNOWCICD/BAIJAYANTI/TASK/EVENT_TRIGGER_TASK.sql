@@ -1,0 +1,5 @@
+create or replace task BAIJAYANTI.EVENT_TRIGGER_TASK
+	warehouse=COMPUTE_WH
+	schedule='30 MINUTES'
+	when SYSTEM$STREAM_HAS_DATA('SORO.ORDER_STREAM')
+	as SELECT 1;
