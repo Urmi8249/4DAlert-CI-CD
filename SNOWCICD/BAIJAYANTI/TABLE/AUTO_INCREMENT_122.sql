@@ -1,0 +1,7 @@
+create or replace TABLE BAIJAYANTI.AUTO_INCREMENT_122 (
+	EMP_ID NUMBER(38,0) NOT NULL autoincrement start 100 increment 5 noorder,
+	EMP_NAME VARCHAR(100),
+	DEPARTMENT VARCHAR(50),
+	SALARY NUMBER(10,2),
+	primary key (EMP_ID)
+);
