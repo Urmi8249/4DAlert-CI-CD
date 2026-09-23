@@ -1,9 +1,0 @@
-create or replace view DUMMY.EMPLOYEE_STATUS_VIEW(
-	STATUS,
-	SALARY,
-	SALARY_LEVEL
-) as
-SELECT
-    'Employee is Active' AS STATUS,
-    50000 AS SALARY,
-    'HIGH' AS SALARY_LEVEL;
